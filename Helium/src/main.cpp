@@ -1,6 +1,12 @@
 #include <iostream>
 
-int main()
+#include "common.h"
+#include "args.h"
+
+int main(int argc, char* argv[])
 {
-	std::cout << "Hello World!" << std::endl;
+	parseArgs(argc, argv);
+
+	std::cout << "Input File: " << Args::inputFile << std::endl;
+	std::cout << "Output File: " << Args::outputFile << std::endl;
 }
