@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Working directory for debugging purposes
+/wd
+
 # User-specific files
 *.rsuser
 *.suo
