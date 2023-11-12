@@ -1,5 +1,8 @@
 #include "Token.h"
 
+#include <string>
+#include <stdexcept>
+
 #include "common.h"
 #include "asciiUtils.h"
 #include "errorCodes.h"
