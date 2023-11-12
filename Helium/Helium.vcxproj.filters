@@ -21,6 +21,21 @@
     <ClCompile Include="src\args.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Token.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\errorCodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\asciiUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HeType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common.h">
@@ -29,13 +44,28 @@
     <ClInclude Include="src\typeDefs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils.h">
+    <ClInclude Include="src\debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\args.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\errorCodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Token.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Compiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\asciiUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HeType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
