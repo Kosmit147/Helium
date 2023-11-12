@@ -1,10 +1,12 @@
 #include "args.h"
 
-std::string Args::inputFile;
-std::string Args::outputFile;
+#include <string>
+#include <iostream>
 
-void parseArgs(int argc, char* argv[])
+Args parseArgs(int argc, char* argv[])
 {
+	Args args;
+
 	ArgType prevArg = ArgType::NONE;
 	std::string argStr;
 
@@ -26,10 +28,10 @@ void parseArgs(int argc, char* argv[])
 			{
 			case ArgType::NONE:
 			case ArgType::INPUT_FILE_NAME:
-				Args::inputFile = argStr;
+				args.inputFile = argStr;
 				break;
 			case ArgType::OUTPUT_FILE_NAME:
-				Args::outputFile = argStr;
+				args.outputFile = argStr;
 				break;
 			}
 
@@ -37,8 +39,9 @@ void parseArgs(int argc, char* argv[])
 		}
 		else
 		{
-			std::cerr << "Incorrect usage!" << std::endl;
-			exit((int)ErrorCode::INCORRECT_USAGE);
+			exitWithError(ErrorCode::INCORRECT_USAGE);
 		}
 	}
+
+	return args;
 }

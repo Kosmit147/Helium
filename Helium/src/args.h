@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include "common.h"
@@ -7,8 +8,10 @@
 
 struct Args
 {
-	static std::string inputFile;
-	static std::string outputFile;
+	std::string inputFile;
+	std::string outputFile;
+
+	Args() : inputFile(""), outputFile("") {}
 };
 
 enum class ArgType
@@ -18,4 +21,4 @@ enum class ArgType
 	INPUT_FILE_NAME
 };
 
-void parseArgs(int argc, char* argv[]);
+Args parseArgs(int argc, char* argv[]);
