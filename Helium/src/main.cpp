@@ -19,4 +19,11 @@ int main(int argc, char* argv[])
 	std::cout << std::endl;
 	printCode(heCode.view());
 #endif
+
+	std::ofstream outputFile;
+	outputFile.open(args.outputFile, std::ios::out);
+
+	Compiler::compileIntoFile(args, tokens, outputFile);
+
+	outputFile.close();
 }

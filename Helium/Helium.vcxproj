@@ -65,6 +65,9 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(SolutionDir)\$(Platform)\$(Configuration)\bin\helium.exe $(SolutionDir)\wd</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -82,10 +85,14 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(SolutionDir)\$(Platform)\$(Configuration)\bin\helium.exe $(SolutionDir)\wd</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\args.cpp" />
     <ClCompile Include="src\asciiUtils.cpp" />
+    <ClCompile Include="src\Compiler.cpp" />
     <ClCompile Include="src\errorCodes.cpp" />
     <ClCompile Include="src\file.cpp" />
     <ClCompile Include="src\HeType.cpp" />
