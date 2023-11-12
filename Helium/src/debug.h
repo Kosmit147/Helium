@@ -1,5 +1,7 @@
 #pragma once
 
+#define HE_RETURN_CHECK 4715
+
 #ifdef _DEBUG
 #define HE_DEBUG_BREAK __debugbreak();
 #else

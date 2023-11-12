@@ -100,6 +100,7 @@
     <ClInclude Include="src\errorCodes.h" />
     <ClInclude Include="src\file.h" />
     <ClInclude Include="src\HeType.h" />
+    <ClInclude Include="src\log.h" />
     <ClInclude Include="src\Token.h" />
     <ClInclude Include="src\typeDefs.h" />
     <ClInclude Include="src\debug.h" />

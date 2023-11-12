@@ -2,11 +2,21 @@
 
 #include "common.h"
 #include "args.h"
+#include "Token.h"
+#include "Compiler.h"
+#include "file.h"
+#include "log.h"
 
 int main(int argc, char* argv[])
 {
-	parseArgs(argc, argv);
+	Args args = parseArgs(argc, argv);
 
-	std::cout << "Input File: " << Args::inputFile << std::endl;
-	std::cout << "Output File: " << Args::outputFile << std::endl;
+	std::stringstream heCode = readFile(args.inputFile);
+	std::vector<Token> tokens = Tokenizer::tokenize(heCode.view());
+
+#ifdef _DEBUG
+	printTokens(tokens);
+	std::cout << std::endl;
+	printCode(heCode.view());
+#endif
 }
