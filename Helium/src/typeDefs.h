@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <memory>
 
 using u8 = uint8_t;
 using u16 = uint16_t;
@@ -20,3 +21,19 @@ using f64 = double;
 
 using usize = std::size_t;
 using it = usize;
+
+template<typename T>
+using Ptr = std::unique_ptr<T>;
+template<typename T, typename ... Args>
+constexpr Ptr<T> createPtr(Args&& ... args)
+{
+	return std::make_unique<T>(std::forward<Args>(args)...);
+}
+
+template<typename T>
+using Ref = std::shared_ptr<T>;
+template<typename T, typename ... Args>
+constexpr Ref<T> createRef(Args&& ... args)
+{
+	return std::make_shared<T>(std::forward<Args>(args)...);
+}
