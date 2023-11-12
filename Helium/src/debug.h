@@ -1,6 +1,12 @@
 #pragma once
 
 #ifdef _DEBUG
+#define HE_DEBUG_BREAK __debugbreak();
+#else
+#define HE_DEBUG_BREAK ;
+#endif
+
+#ifdef _DEBUG
 
 #include <iostream>
 #include <chrono>
