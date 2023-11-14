@@ -111,9 +111,9 @@ public:
 		inline static void i_sub(Register r, u64 val);
 		inline static void i_xor(Register a, Register b);
 
-		constexpr static std::string registerToString(Register r);
-		constexpr static std::string segmentToString(Segment segment);
-		constexpr static std::string addressingModeToString(AddressingMode mode);
+		[[nodiscard]] constexpr static std::string registerToString(Register r);
+		[[nodiscard]] constexpr static std::string segmentToString(Segment segment);
+		[[nodiscard]] constexpr static std::string addressingModeToString(AddressingMode mode);
 	};
 
 private:
@@ -128,9 +128,9 @@ public:
 	Compiler() = delete;
 };
 
-constexpr std::string operator+(const char* left, const Compiler::Asm::AddressingMode& right);
-constexpr std::string operator+(const char* left, const Compiler::Asm::Segment& right);
-constexpr std::string operator+(const char* left, const Compiler::Asm::Register& right);
+[[nodiscard]] constexpr std::string operator+(const char* left, const Compiler::Asm::AddressingMode& right);
+[[nodiscard]] constexpr std::string operator+(const char* left, const Compiler::Asm::Segment& right);
+[[nodiscard]] constexpr std::string operator+(const char* left, const Compiler::Asm::Register& right);
 
 inline std::ostream& operator<<(std::ostream& stream, const Compiler::Asm::AddressingMode& mode);
 inline std::ostream& operator<<(std::ostream& stream, const Compiler::Asm::Segment& segment);

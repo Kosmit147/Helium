@@ -18,4 +18,4 @@ enum class ArgType
 	INPUT_FILE_NAME
 };
 
-Args parseArgs(int argc, char* argv[]);
+[[nodiscard]] Args parseArgs(int argc, char* argv[]);

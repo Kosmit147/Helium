@@ -46,14 +46,14 @@ struct Token
 
 #ifdef _DEBUG
 	static const std::unordered_map<TokenType, std::string> tokenNameMap;
-	static std::string getTokenStr(TokenType type);
+	[[nodiscard]] static std::string getTokenStr(TokenType type);
 #endif
 };
 
 class Tokenizer
 {
 public:
-	static std::vector<Token> tokenize(std::string_view input);
+	[[nodiscard]] static std::vector<Token> tokenize(std::string_view input);
 	
 private:
 	static std::string_view input;
@@ -63,9 +63,9 @@ private:
 	static it index;
 
 private:
-	static Token readKeywordOrVar();
-	static Token readI32Literal();
-	static Token readSpecialChar();
+	[[nodiscard]] static Token readKeywordOrVar();
+	[[nodiscard]] static Token readI32Literal();
+	[[nodiscard]] static Token readSpecialChar();
 
 public:
 	Tokenizer() = delete;

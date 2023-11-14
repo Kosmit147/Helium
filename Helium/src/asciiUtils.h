@@ -9,6 +9,6 @@ enum class CharacterType
 	OTHER,
 };
 
-inline bool isWhiteSpace(char c);
-inline bool isSpecialChar(char c);
-CharacterType getCharacterType(char c);
+[[nodiscard]] inline bool isWhiteSpace(char c);
+[[nodiscard]] inline bool isSpecialChar(char c);
+[[nodiscard]] CharacterType getCharacterType(char c);
