@@ -35,7 +35,7 @@ void Compiler::compileIntoFile(const Args& args, const std::vector<Token>& token
 
 	setReturnInt(0);
 
-	Asm::call("ExitProcess", tokens[1].literal->value);
+	Asm::call("ExitProcess", tokens[1].literal->getValue<i32>());
 
 	writeToFile(outputFileName, segmentsData);
 }

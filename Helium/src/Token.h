@@ -3,6 +3,7 @@
 #include <vector>
 #include <string_view>
 #include <unordered_map>
+#include <variant>
 
 #include "common.h"
 #include "HeType.h"
@@ -10,8 +11,15 @@
 
 struct Literal
 {
+public:
 	const HeType type;
-	const usize value;
+	const std::variant<i32> value;
+
+	template<typename T>
+	inline T getValue() const
+	{
+		return std::get<T>(value);
+	}
 };
 
 struct Variable
@@ -21,8 +29,6 @@ struct Variable
 
 	Variable(HeType type, const std::string& name);
 	Variable(HeType type, std::string&& name);
-
-	Variable() = delete;
 };
 
 struct Token

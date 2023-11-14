@@ -10,8 +10,18 @@
 
 inline std::ostream& operator<<(std::ostream& stream, const Literal& literal)
 {
-	stream << "{ literalType: " << getHeTypeStr(literal.type) << ", value: "
-		<< literal.value << " }";
+	stream << "{ literalType: " << getHeTypeStr(literal.type) << ", value: ";
+
+	switch (literal.type)
+	{
+	case HeType::I32:
+		stream << literal.getValue<i32>();
+		break;
+	default:
+		HE_DEBUG_BREAK;
+	}
+
+	stream << " }";
 
 	return stream;
 }
