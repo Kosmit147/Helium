@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+
+#include "common.h"
+
 enum class ErrorCode
 {
 	INCORRECT_USAGE = 1,
