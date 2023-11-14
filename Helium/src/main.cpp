@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 	Args args = parseArgs(argc, argv);
 
 	std::stringstream heCode = readFile(args.inputFile);
-	std::vector<Token> tokens = Tokenizer::tokenize(heCode.view());
+	std::vector<Token> tokens = Tokenizer::tokenize(args, heCode.view());
 
 #ifdef _DEBUG
 	printTokens(tokens);

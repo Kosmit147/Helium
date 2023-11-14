@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "HeType.h"
+#include "args.h"
 
 struct Literal
 {
@@ -58,7 +59,7 @@ struct Token
 class Tokenizer
 {
 public:
-	[[nodiscard]] static std::vector<Token> tokenize(std::string_view input);
+	[[nodiscard]] static std::vector<Token> tokenize(const Args& args, std::string_view input);
 	
 private:
 	static std::string_view input;
@@ -66,6 +67,7 @@ private:
 	static usize col;
 	static usize colOffset;
 	static it index;
+	static const Args* args;
 
 private:
 	[[nodiscard]] static Token readKeywordOrVar();

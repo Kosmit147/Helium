@@ -10,4 +10,5 @@ enum class ErrorCode
 	FAILED_TO_TOKENIZE,
 };
 
-void exitWithError(ErrorCode errorCodeEnum);
+void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName = "", 
+	usize row = 0, usize col = 0);

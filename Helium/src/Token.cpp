@@ -21,6 +21,7 @@ usize Tokenizer::row = 0;
 usize Tokenizer::col = 0;
 usize Tokenizer::colOffset = 0;
 it Tokenizer::index = 0;
+const Args* Tokenizer::args;
 
 const Token Token::errorToken = { TokenType::ERR, 0, 0 };
 
@@ -30,8 +31,9 @@ Variable::Variable(HeType type, const std::string& name)
 Variable::Variable(HeType type, std::string&& name)
 	: type(type), name(std::move(name)) {}
 
-std::vector<Token> Tokenizer::tokenize(std::string_view input)
+std::vector<Token> Tokenizer::tokenize(const Args& args, std::string_view input)
 {
+	Tokenizer::args = &args;
 	Tokenizer::input = input;
 
 	std::vector<Token> tokens;
@@ -103,7 +105,7 @@ Token Tokenizer::readKeywordOrVar()
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, args->inputFile, row, tokenStartCol);
 	return Token::errorToken;
 }
 
@@ -133,7 +135,7 @@ Token Tokenizer::readI32Literal()
 			}
 			catch (std::out_of_range)
 			{
-				exitWithError(ErrorCode::I32_LITERAL_OUT_OF_RANGE);
+				exitWithError(ErrorCode::I32_LITERAL_OUT_OF_RANGE, args->inputFile, row, tokenStartCol);
 			}
 
 			Token token(TokenType::LITERAL, row, tokenStartCol);
@@ -143,7 +145,7 @@ Token Tokenizer::readI32Literal()
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, args->inputFile, row, tokenStartCol);
 	return Token::errorToken;
 }
 
@@ -156,10 +158,10 @@ Token Tokenizer::readSpecialChar()
 	if (search != Token::tokenTypeMap.end())
 		return { search->second, row, index - colOffset };
 	else
-		exitWithError(ErrorCode::UNEXPECTED_CHARACTER);
+		exitWithError(ErrorCode::UNEXPECTED_CHARACTER, args->inputFile, row, col);
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, args->inputFile, row, col);
 	return Token::errorToken;
 }
 

@@ -5,9 +5,17 @@
 
 #include "common.h"
 
-void exitWithError(ErrorCode errorCodeEnum)
+void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName,
+	usize row, usize col)
 {
 	std::string errorMsg;
+	std::string fileInfStr;
+
+	if (!fileInfStr.empty())
+	{
+		fileInfStr = (std::string)fileName + ':'
+			+ std::to_string(row) + ':' + std::to_string(col);
+	}
 
 	switch (errorCodeEnum)
 	{
@@ -21,13 +29,13 @@ void exitWithError(ErrorCode errorCodeEnum)
 		errorMsg = "Failed to write to output file.";
 		break;
 	case ErrorCode::I32_LITERAL_OUT_OF_RANGE:
-		errorMsg = "i32 literal out of range.";
+		errorMsg = fileInfStr + ' ' + "i32 literal out of range.";
 		break;
 	case ErrorCode::UNEXPECTED_CHARACTER:
-		errorMsg = "Unexpected character.";
+		errorMsg = fileInfStr + ' ' + "Unexpected character.";
 		break;
 	case ErrorCode::FAILED_TO_TOKENIZE:
-		errorMsg = "Failed to tokenize.";
+		errorMsg = fileInfStr + ' ' + "Failed to tokenize.";
 		break;
 	default:
 		errorMsg = ERR_STR;
