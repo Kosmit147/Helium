@@ -9,15 +9,19 @@
 
 struct Literal
 {
-	HeType type;
-	usize value;
+	const HeType type;
+	const usize value;
 };
 
 struct Variable
 {
-	HeType type;
+	const HeType type;
+	const std::string name;
 
-	// TODO
+	Variable(HeType type, const std::string& name);
+	Variable(HeType type, std::string&& name);
+
+	Variable() = delete;
 };
 
 struct Token
@@ -27,15 +31,16 @@ struct Token
 		ERR,
 		EXIT,
 		LITERAL,
+		VARIABLE,
 		SEMICOLON,
 		// when adding new tokens, update tokenTypeMap and tokenNameMap definitions
 	};
 
 	static const std::unordered_map<std::string, TokenType> tokenTypeMap;
 
-	TokenType tokenType;
-	usize row;
-	usize col;
+	const TokenType tokenType;
+	const usize row;
+	const usize col;
 	Ptr<Literal> literal;
 	Ptr<Variable> variable;
 

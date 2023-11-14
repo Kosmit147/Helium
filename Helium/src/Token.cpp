@@ -24,6 +24,12 @@ it Tokenizer::index = 0;
 
 const Token Token::errorToken = { TokenType::ERR, 0, 0 };
 
+Variable::Variable(HeType type, const std::string& name)
+	: type(type), name(name) {}
+
+Variable::Variable(HeType type, std::string&& name)
+	: type(type), name(std::move(name)) {}
+
 std::vector<Token> Tokenizer::tokenize(std::string_view input)
 {
 	Tokenizer::input = input;
@@ -37,7 +43,7 @@ std::vector<Token> Tokenizer::tokenize(std::string_view input)
 
 		if (character == '\n')
 		{
-			colOffset += index;
+			colOffset += index + 1;
 			row++;
 			continue;
 		}
@@ -89,7 +95,9 @@ Token Tokenizer::readKeywordOrVar()
 			}
 			else
 			{
-				// TODO: variable
+				Token token(TokenType::VARIABLE, row, tokenStartCol);
+				token.variable = createPtr<Variable>(HeType::I32, tokenStr);
+				return token;
 			}
 		}
 	}
@@ -165,7 +173,7 @@ Token::Token(const Token& other)
 		literal = createPtr<Literal>(other.literal->type, other.literal->value);
 
 	if (other.variable)
-		variable = createPtr<Variable>(other.variable->type);
+		variable = createPtr<Variable>(other.variable->type, other.variable->name);
 }
 
 #ifdef _DEBUG
@@ -176,6 +184,7 @@ const std::unordered_map<TokenType, std::string> Token::tokenNameMap = {
 	{ TokenType::ERR, ERR_STR },
 	{ TokenType::EXIT, "exit" },
 	{ TokenType::LITERAL, "literal" },
+	{ TokenType::VARIABLE, "variable" },
 	{ TokenType::SEMICOLON, "semicolon" },
 };
 
