@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "Compiler.h"
+#include "SegmentsData.h"
 
 [[nodiscard]] std::stringstream readFile(std::string_view fileName);
 void writeToFile(std::string_view fileName, const std::stringstream& stream);

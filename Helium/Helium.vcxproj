@@ -97,6 +97,7 @@
   <ItemGroup>
     <ClCompile Include="src\args.cpp" />
     <ClCompile Include="src\asciiUtils.cpp" />
+    <ClCompile Include="src\Asm.cpp" />
     <ClCompile Include="src\Compiler.cpp" />
     <ClCompile Include="src\errorCodes.cpp" />
     <ClCompile Include="src\file.cpp" />
@@ -108,11 +109,14 @@
     <ClInclude Include="src\args.h" />
     <ClInclude Include="src\asciiUtils.h" />
     <ClInclude Include="src\common.h" />
+    <ClInclude Include="src\Asm.h" />
     <ClInclude Include="src\Compiler.h" />
     <ClInclude Include="src\errorCodes.h" />
     <ClInclude Include="src\file.h" />
     <ClInclude Include="src\HeType.h" />
     <ClInclude Include="src\log.h" />
+    <ClInclude Include="src\SegmentsData.h" />
+    <ClInclude Include="src\syntaxParsing.h" />
     <ClInclude Include="src\Token.h" />
     <ClInclude Include="src\typeDefs.h" />
     <ClInclude Include="src\debug.h" />

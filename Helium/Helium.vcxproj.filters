@@ -36,6 +36,9 @@
     <ClCompile Include="src\HeType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Asm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Compiler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -59,7 +62,7 @@
     <ClInclude Include="src\Token.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Compiler.h">
+    <ClInclude Include="src\Asm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\asciiUtils.h">
@@ -72,6 +75,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\syntaxParsing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Compiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SegmentsData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

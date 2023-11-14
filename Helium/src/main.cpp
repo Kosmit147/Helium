@@ -20,5 +20,5 @@ int main(int argc, char* argv[])
 	printCode(heCode.view());
 #endif
 
-	Compiler::compileIntoFile(args, tokens, args.outputFile);
+	Compiler::compileIntoFile(args, args.outputFile);
 }
