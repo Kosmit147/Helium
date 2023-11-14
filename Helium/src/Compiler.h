@@ -102,6 +102,9 @@ public:
 
 		inline static void call(const Symbol& symbol);
 		inline static void call(std::string_view name);
+		inline static void call(const Symbol& symbol, u64 val);
+		inline static void call(std::string_view name, u64 val);
+
 		inline static void setLabel(const Symbol& symbol);
 		inline static void setLabel(std::string_view name);
 

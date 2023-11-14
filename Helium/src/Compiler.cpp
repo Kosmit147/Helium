@@ -34,9 +34,8 @@ void Compiler::compileIntoFile(const Args& args, const std::vector<Token>& token
 	Asm::newLine();
 
 	setReturnInt(0);
-	setArgInt(0, tokens[1].literal->value);
 
-	Asm::call("ExitProcess");
+	Asm::call("ExitProcess", tokens[1].literal->value);
 
 	writeToFile(outputFileName, segmentsData);
 }
@@ -153,6 +152,18 @@ inline void Compiler::Asm::call(const Symbol& symbol)
 
 inline void Compiler::Asm::call(std::string_view name)
 {
+	text << TAB << "call " << name.data() << NL;
+}
+
+inline void Compiler::Asm::call(const Symbol& symbol, u64 val)
+{
+	setArgInt(0, val);
+	text << TAB << "call " << symbol.name << NL;
+}
+
+inline void Compiler::Asm::call(std::string_view name, u64 val)
+{
+	setArgInt(0, val);
 	text << TAB << "call " << name.data() << NL;
 }
 
