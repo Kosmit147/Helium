@@ -128,10 +128,6 @@ public:
 	Compiler() = delete;
 };
 
-[[nodiscard]] constexpr std::string operator+(const char* left, const Compiler::Asm::AddressingMode& right);
-[[nodiscard]] constexpr std::string operator+(const char* left, const Compiler::Asm::Segment& right);
-[[nodiscard]] constexpr std::string operator+(const char* left, const Compiler::Asm::Register& right);
-
-inline std::ostream& operator<<(std::ostream& stream, const Compiler::Asm::AddressingMode& mode);
-inline std::ostream& operator<<(std::ostream& stream, const Compiler::Asm::Segment& segment);
-inline std::ostream& operator<<(std::ostream& stream, const Compiler::Asm::Register& r);
+inline std::ostream& operator<<(std::ostream& stream, Compiler::Asm::AddressingMode mode);
+inline std::ostream& operator<<(std::ostream& stream, Compiler::Asm::Segment segment);
+inline std::ostream& operator<<(std::ostream& stream, Compiler::Asm::Register r);

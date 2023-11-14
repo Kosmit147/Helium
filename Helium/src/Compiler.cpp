@@ -193,34 +193,19 @@ inline void Compiler::Asm::i_xor(Register a, Register b)
 
 Compiler::Asm::Symbol::Symbol(std::string&& name) : name(std::move(name)) {}
 
-constexpr std::string operator+(const char* left, const Compiler::Asm::AddressingMode& right)
-{
-	return std::string(left) + Compiler::Asm::addressingModeToString(right);
-}
-
-constexpr std::string operator+(const char* left, const Compiler::Asm::Segment& right)
-{
-	return std::string(left) + Compiler::Asm::segmentToString(right);
-}
-
-constexpr std::string operator+(const char* left, const Compiler::Asm::Register& right)
-{
-	return std::string(left) + Compiler::Asm::registerToString(right);
-}
-
-inline std::ostream& operator<<(std::ostream& stream, const Compiler::Asm::AddressingMode& mode)
+inline std::ostream& operator<<(std::ostream& stream, Compiler::Asm::AddressingMode mode)
 {
 	stream << Compiler::Asm::addressingModeToString(mode);
 	return stream;
 }
 
-inline std::ostream& operator<<(std::ostream& stream, const Compiler::Asm::Segment& segment)
+inline std::ostream& operator<<(std::ostream& stream, Compiler::Asm::Segment segment)
 {
 	stream << Compiler::Asm::segmentToString(segment);
 	return stream;
 }
 
-inline std::ostream& operator<<(std::ostream& stream, const Compiler::Asm::Register& r)
+inline std::ostream& operator<<(std::ostream& stream, Compiler::Asm::Register r)
 {
 	stream << Compiler::Asm::registerToString(r);
 	return stream;
