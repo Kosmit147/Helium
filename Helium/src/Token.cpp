@@ -65,6 +65,7 @@ std::vector<Token> Tokenizer::tokenize(const Args& args, std::string_view input)
 		}
 		else if (type == CharacterType::SPECIAL_CHAR)
 		{
+			// special character
 			tokens.push_back(std::forward<Token>(readSpecialChar()));
 		}
 	}
