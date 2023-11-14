@@ -4,7 +4,6 @@
 
 #ifdef _DEBUG
 
-#pragma warning(suppress: HE_RETURN_CHECK)
 std::string getHeTypeStr(HeType type)
 {
     switch (type)
@@ -15,6 +14,7 @@ std::string getHeTypeStr(HeType type)
     }
 
     HE_DEBUG_BREAK
+    return ERR_STR;
 }
 
 #endif

@@ -1,7 +1,6 @@
 #include "args.h"
 
 #include <string>
-#include <iostream>
 
 Args parseArgs(int argc, char* argv[])
 {
@@ -10,7 +9,7 @@ Args parseArgs(int argc, char* argv[])
 	ArgType prevArg = ArgType::NONE;
 	std::string argStr;
 
-	// first arg is the name of the executable
+	// skip first arg, it's the name of the executable
 	for (it i = 1; i < argc; i++)
 	{
 		argStr = argv[i];

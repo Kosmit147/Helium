@@ -20,3 +20,37 @@ std::stringstream readFile(std::string_view fileName)
 
 	return result;
 }
+
+void writeToFile(std::string_view fileName, const std::stringstream& stream)
+{
+	std::ofstream outputFile;
+
+	try
+	{
+		outputFile.open(fileName.data(), std::ios::in);
+		outputFile << stream.str();
+		outputFile.close();
+	}
+	catch (std::ofstream::failure)
+	{
+		exitWithError(ErrorCode::FAILED_TO_WRITE_TO_OUTPUT_FILE);
+	}
+}
+
+void writeToFile(std::string_view fileName, const SegmentsData& segments)
+{
+	std::ofstream outputFile;
+
+	try
+	{
+		outputFile.open(fileName.data(), std::ios::in);
+		outputFile << segments.bss.str();
+		outputFile << segments.data.str();
+		outputFile << segments.text.str();
+		outputFile.close();
+	}
+	catch (std::ofstream::failure)
+	{
+		exitWithError(ErrorCode::FAILED_TO_WRITE_TO_OUTPUT_FILE);
+	}
+}

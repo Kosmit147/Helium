@@ -26,7 +26,11 @@ void exitWithError(ErrorCode errorCodeEnum)
 	case ErrorCode::UNEXPECTED_CHARACTER:
 		errorMsg = "Unexpected character.";
 		break;
+	case ErrorCode::FAILED_TO_TOKENIZE:
+		errorMsg = "Failed to tokenize.";
+		break;
 	default:
+		errorMsg = ERR_STR;
 		HE_DEBUG_BREAK // Incorrect error code
 		break;
 	}

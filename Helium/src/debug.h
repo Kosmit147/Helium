@@ -1,6 +1,6 @@
 #pragma once
 
-#define HE_RETURN_CHECK 4715
+#define ERR_STR "ERR"
 
 #ifdef _DEBUG
 #define HE_DEBUG_BREAK __debugbreak();

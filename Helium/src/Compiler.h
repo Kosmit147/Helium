@@ -1,19 +1,23 @@
 #pragma once
 
-#include <fstream>
+#include <sstream>
 
 #include "args.h"
 #include "Token.h"
 
-#define ASM *outputFile
-#define ASM_INS *outputFile << '\t'
+#define TAB '\t'
 #define NL '\n'
+
+struct SegmentsData
+{
+	std::stringstream bss, data, text;
+};
 
 class Compiler
 {
 public:
 	static void compileIntoFile(const Args& args, const std::vector<Token>& tokens, 
-		std::ofstream& outputFile);
+		std::string_view outputFileName);
 	static void compileStatement(usize startTokenIndex, usize endTokenIndex);
 
 	inline static void setUpShadowZone();
@@ -113,7 +117,10 @@ public:
 	};
 
 private:
-	static std::ofstream* outputFile;
+	static SegmentsData segmentsData;
+	static std::stringstream& bss;
+	static std::stringstream& data;
+	static std::stringstream& text;
 	static const Args* args;
 	static const std::vector<Token>* tokens;
 

@@ -1,13 +1,18 @@
 #include "Compiler.h"
 
-std::ofstream* Compiler::outputFile = nullptr;
+#include "file.h"
+
+SegmentsData Compiler::segmentsData{};
+std::stringstream& Compiler::bss = Compiler::segmentsData.bss;
+std::stringstream& Compiler::data = Compiler::segmentsData.data;
+std::stringstream& Compiler::text = Compiler::segmentsData.text;
+
 const Args* Compiler::args = nullptr;
 const std::vector<Token>* Compiler::tokens = nullptr;
 
 void Compiler::compileIntoFile(const Args& args, const std::vector<Token>& tokens,
-	std::ofstream& outputFile)
+	std::string_view outputFileName)
 {
-	Compiler::outputFile = &outputFile;
 	Compiler::args = &args;
 	Compiler::tokens = &tokens;
 
@@ -32,6 +37,8 @@ void Compiler::compileIntoFile(const Args& args, const std::vector<Token>& token
 	setArgInt(0, tokens[1].literal->value);
 
 	Asm::call("ExitProcess");
+
+	writeToFile(outputFileName, segmentsData);
 }
 
 void Compiler::compileStatement(usize startTokenIndex, usize endTokenIndex)
@@ -82,7 +89,7 @@ inline void Compiler::setArgInt(usize pos, u64 val)
 		r = Asm::Register::R9;
 		break;
 	default:
-		HE_DEBUG_BREAK
+		HE_DEBUG_BREAK;
 		break;
 	}
 
@@ -91,97 +98,97 @@ inline void Compiler::setArgInt(usize pos, u64 val)
 
 inline void Compiler::Asm::newLine()
 {
-	ASM << NL;
+	text << NL;
 }
 
 inline void Compiler::Asm::comment(std::string_view comment)
 {
-	ASM << ";" << comment << NL;
+	text << ";" << comment << NL;
 }
 
 inline void Compiler::Asm::insComment(std::string_view comment)
 {
-	ASM_INS << ";" << comment << NL;
+	text << TAB << ";" << comment << NL;
 }
 
 inline void Compiler::Asm::setBits(usize bits)
 {
-	ASM << "bits " << bits << NL;
+	text << "bits " << bits << NL;
 }
 
 inline void Compiler::Asm::setAddressingMode(AddressingMode mode)
 {
-	ASM << "default " << mode << NL;
+	text << "default " << mode << NL;
 }
 
 inline void Compiler::Asm::setSegment(Segment segment)
 {
-	ASM << "segment " << segment << NL;
+	text << "segment " << segment << NL;
 }
 
 inline void Compiler::Asm::exportSymbol(const Symbol& symbol)
 {
-	ASM << "global " << symbol.name << NL;
+	text << "global " << symbol.name << NL;
 }
 
 inline void Compiler::Asm::exportSymbol(std::string_view name)
 {
-	ASM << "global " << name.data() << NL;
+	text << "global " << name.data() << NL;
 }
 
 inline void Compiler::Asm::importSymbol(const Symbol& symbol)
 {
-	ASM << "global " << symbol.name << NL;
+	text << "global " << symbol.name << NL;
 }
 
 inline void Compiler::Asm::importSymbol(std::string_view name)
 {
-	ASM << "extern " << name.data() << NL;
+	text << "extern " << name.data() << NL;
 }
 
 inline void Compiler::Asm::call(const Symbol& symbol)
 {
-	ASM_INS << "call " << symbol.name << NL;
+	text << TAB << "call " << symbol.name << NL;
 }
 
 inline void Compiler::Asm::call(std::string_view name)
 {
-	ASM_INS << "call " << name.data() << NL;
+	text << TAB << "call " << name.data() << NL;
 }
 
 inline void Compiler::Asm::setLabel(const Symbol& symbol)
 {
-	ASM << symbol.name << ':' << NL;
+	text << symbol.name << ':' << NL;
 }
 
 inline void Compiler::Asm::setLabel(std::string_view name)
 {
-	ASM << name.data() << ':' << NL;
+	text << name.data() << ':' << NL;
 }
 
 inline void Compiler::Asm::i_push(Register r)
 {
-	ASM_INS << "push " << r << NL;
+	text << TAB << "push " << r << NL;
 }
 
 inline void Compiler::Asm::i_mov(Register dst, Register src)
 {
-	ASM_INS << "mov " << dst << ", " << src << NL;
+	text << TAB << "mov " << dst << ", " << src << NL;
 }
 
 inline void Compiler::Asm::i_mov(Register r, u64 val)
 {
-	ASM_INS << "mov " << r << ", " << val << NL;
+	text << TAB << "mov " << r << ", " << val << NL;
 }
 
 inline void Compiler::Asm::i_sub(Register r, u64 val)
 {
-	ASM_INS << "sub " << r << ", " << val << NL;
+	text << TAB << "sub " << r << ", " << val << NL;
 }
 
 inline void Compiler::Asm::i_xor(Register a, Register b)
 {
-	ASM_INS << "xor " << a << ", " << b << NL;
+	text << TAB << "xor " << a << ", " << b << NL;
 }
 
 Compiler::Asm::Symbol::Symbol(std::string&& name) : name(std::move(name)) {}
@@ -219,7 +226,6 @@ inline std::ostream& operator<<(std::ostream& stream, const Compiler::Asm::Regis
 	return stream;
 }
 
-#pragma warning(suppress: HE_RETURN_CHECK)
 constexpr std::string Compiler::Asm::addressingModeToString(AddressingMode mode)
 {
 	switch (mode)
@@ -238,10 +244,10 @@ constexpr std::string Compiler::Asm::addressingModeToString(AddressingMode mode)
 		break;
 	}
 
-	HE_DEBUG_BREAK
+	HE_DEBUG_BREAK;
+	return ERR_STR;
 }
 
-#pragma warning(suppress: HE_RETURN_CHECK)
 constexpr std::string Compiler::Asm::segmentToString(Segment segment)
 {
 	switch (segment)
@@ -257,10 +263,10 @@ constexpr std::string Compiler::Asm::segmentToString(Segment segment)
 		break;
 	}
 
-	HE_DEBUG_BREAK
+	HE_DEBUG_BREAK;
+	return ERR_STR;
 }
 
-#pragma warning(suppress: HE_RETURN_CHECK)
 constexpr std::string Compiler::Asm::registerToString(Register r)
 {
 	switch (r)
@@ -363,5 +369,6 @@ constexpr std::string Compiler::Asm::registerToString(Register r)
 		break;	
 	}
 
-	HE_DEBUG_BREAK
+	HE_DEBUG_BREAK;
+	return ERR_STR;
 }

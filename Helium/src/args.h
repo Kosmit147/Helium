@@ -1,17 +1,14 @@
 #pragma once
 
 #include <string>
-#include <vector>
 
 #include "common.h"
 #include "errorCodes.h"
 
 struct Args
 {
-	std::string inputFile;
-	std::string outputFile;
-
-	Args() : inputFile(""), outputFile("") {}
+	std::string inputFile = "";
+	std::string outputFile = "";
 };
 
 enum class ArgType

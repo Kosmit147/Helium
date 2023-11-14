@@ -11,8 +11,6 @@ struct Literal
 {
 	HeType type;
 	usize value;
-
-	Literal(HeType type, usize value);
 };
 
 struct Variable
@@ -26,6 +24,7 @@ struct Token
 {
 	enum class TokenType
 	{
+		ERR,
 		EXIT,
 		LITERAL,
 		SEMICOLON,
@@ -41,6 +40,9 @@ struct Token
 	Ptr<Variable> variable;
 
 	Token(TokenType tokenType, usize row, usize col);
+	Token(const Token& other);
+
+	static const Token errorToken;
 
 #ifdef _DEBUG
 	static const std::unordered_map<TokenType, std::string> tokenNameMap;
