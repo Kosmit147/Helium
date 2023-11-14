@@ -15,7 +15,8 @@ enum class ArgType
 {
 	NONE,
 	OUTPUT_FILE_NAME,
-	INPUT_FILE_NAME
+	INPUT_FILE_NAME,
+	PRINT_HELP,
 };
 
 [[nodiscard]] Args parseArgs(int argc, char* argv[]);

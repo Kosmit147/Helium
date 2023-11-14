@@ -40,11 +40,6 @@ void Compiler::compileIntoFile(const Args& args, const std::vector<Token>& token
 	writeToFile(outputFileName, segmentsData);
 }
 
-void Compiler::compileStatement(usize startTokenIndex, usize endTokenIndex)
-{
-	
-}
-
 inline void Compiler::setUpShadowZone()
 {
 #ifdef _DEBUG

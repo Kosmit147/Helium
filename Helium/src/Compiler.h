@@ -18,7 +18,6 @@ class Compiler
 public:
 	static void compileIntoFile(const Args& args, const std::vector<Token>& tokens, 
 		std::string_view outputFileName);
-	static void compileStatement(usize startTokenIndex, usize endTokenIndex);
 
 	inline static void setUpShadowZone();
 

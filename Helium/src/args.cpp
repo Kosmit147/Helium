@@ -2,8 +2,13 @@
 
 #include <string>
 
+#include "log.h"
+
 Args parseArgs(int argc, char* argv[])
 {
+	if (argc <= 1)
+		exitWithError(ErrorCode::INCORRECT_USAGE);
+
 	Args args;
 
 	ArgType prevArg = ArgType::NONE;
@@ -17,9 +22,18 @@ Args parseArgs(int argc, char* argv[])
 		if (argStr[0] == '-' && prevArg == ArgType::NONE)
 		{
 			if (argStr == "-o")
+			{
 				prevArg = ArgType::OUTPUT_FILE_NAME;
+			}
 			else if (argStr == "-i")
+			{
 				prevArg = ArgType::INPUT_FILE_NAME;
+			}
+			else if (argStr == "-h")
+			{
+				prevArg = ArgType::PRINT_HELP;
+				printHelp();
+			}
 		}
 		else if (argStr[0] != '-')
 		{
@@ -31,6 +45,9 @@ Args parseArgs(int argc, char* argv[])
 				break;
 			case ArgType::OUTPUT_FILE_NAME:
 				args.outputFile = argStr;
+				break;
+			case ArgType::PRINT_HELP:
+				exitWithError(ErrorCode::INCORRECT_USAGE);
 				break;
 			}
 
