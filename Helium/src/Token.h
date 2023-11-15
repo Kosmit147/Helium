@@ -63,7 +63,7 @@ struct Token
 
 #ifdef _DEBUG
 	static const std::unordered_map<TokenType, std::string> tokenNameMap;
-	[[nodiscard]] static std::string getTokenStr(TokenType type);
+	[[nodiscard]] static const char* getTokenStr(TokenType type);
 #endif
 };
 

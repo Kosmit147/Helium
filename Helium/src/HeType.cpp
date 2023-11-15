@@ -7,7 +7,7 @@
 
 #ifdef _DEBUG
 
-std::string getHeTypeStr(HeType type)
+const char* getHeTypeStr(HeType type)
 {
     switch (type)
     {

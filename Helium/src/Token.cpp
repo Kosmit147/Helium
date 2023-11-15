@@ -202,12 +202,12 @@ const std::unordered_map<TokenType, std::string> Token::tokenNameMap = {
 	{ TokenType::SEMICOLON, "semicolon" },
 };
 
-std::string Token::getTokenStr(TokenType type)
+const char* Token::getTokenStr(TokenType type)
 {
 	auto search = tokenNameMap.find(type);
 
 	if (search != tokenNameMap.end())
-		return search->second;
+		return search->second.c_str();
 
 	HE_DEBUG_BREAK;
 	return ERR_STR;

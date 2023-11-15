@@ -12,6 +12,6 @@ enum class HeType
 
 #include <string>
 
-[[nodiscard]] std::string getHeTypeStr(HeType type);
+[[nodiscard]] const char* getHeTypeStr(HeType type);
 
 #endif
