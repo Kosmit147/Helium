@@ -7,9 +7,9 @@
 
 const Args* Compiler::args;
 
-void Compiler::compileIntoFile(const Args& args, std::string_view fileName)
+void Compiler::compileIntoFile(const Args& newArgs, std::string_view fileName)
 {
-	Compiler::args = &args;
+	args = &newArgs;
 
 	Asm::setBits(64);
 	Asm::setAddressingMode(Asm::AddressingMode::REL);

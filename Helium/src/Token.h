@@ -57,6 +57,8 @@ struct Token
 	Token(TokenType tokenType, usize row, usize col);
 	Token(const Token& other);
 
+	Token& operator=(const Token& other);
+
 	static const Token errorToken;
 
 #ifdef _DEBUG
@@ -68,7 +70,7 @@ struct Token
 class Tokenizer
 {
 public:
-	[[nodiscard]] static std::vector<Token> tokenize(const Args& args, std::string_view input);
+	[[nodiscard]] static std::vector<Token> tokenize(const Args& newArgs, std::string_view newInput);
 	
 private:
 	static std::string_view input;

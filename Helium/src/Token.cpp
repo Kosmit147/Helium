@@ -34,10 +34,10 @@ Variable::Variable(HeType type, const std::string& name)
 Variable::Variable(HeType type, std::string&& name)
 	: type(type), name(std::move(name)) {}
 
-std::vector<Token> Tokenizer::tokenize(const Args& args, std::string_view input)
+std::vector<Token> Tokenizer::tokenize(const Args& newArgs, std::string_view newInput)
 {
-	Tokenizer::args = &args;
-	Tokenizer::input = input;
+	args = &newArgs;
+	input = newInput;
 
 	std::vector<Token> tokens;
 
@@ -137,7 +137,7 @@ Token Tokenizer::readI32Literal()
 			{
 				value = std::stoi(tokenStr);
 			}
-			catch (std::out_of_range)
+			catch (std::out_of_range&)
 			{
 				exitWithError(ErrorCode::I32_LITERAL_OUT_OF_RANGE, args->inputFile, row, tokenStartCol);
 			}
@@ -180,6 +180,14 @@ Token::Token(const Token& other)
 
 	if (other.variable)
 		variable = createPtr<Variable>(other.variable->type, other.variable->name);
+}
+
+Token& Token::operator=(const Token& other)
+{
+	// can't assign a token to another token, because of
+	// const members
+	HE_DEBUG_BREAK;
+	return *this;
 }
 
 #ifdef _DEBUG

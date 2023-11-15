@@ -16,7 +16,7 @@ std::stringstream readFile(std::string_view fileName)
 		result << inputFile.rdbuf();
 		inputFile.close();
 	}
-	catch (std::ifstream::failure)
+	catch (std::ifstream::failure&)
 	{
 		exitWithError(ErrorCode::FAILED_TO_READ_FROM_INPUT_FILE);
 	}
@@ -34,7 +34,7 @@ void writeToFile(std::string_view fileName, const std::stringstream& stream)
 		outputFile << stream.str();
 		outputFile.close();
 	}
-	catch (std::ofstream::failure)
+	catch (std::ofstream::failure&)
 	{
 		exitWithError(ErrorCode::FAILED_TO_WRITE_TO_OUTPUT_FILE);
 	}
@@ -52,7 +52,7 @@ void writeToFile(std::string_view fileName, const SegmentsData& segments)
 		outputFile << segments.text.str();
 		outputFile.close();
 	}
-	catch (std::ofstream::failure)
+	catch (std::ofstream::failure&)
 	{
 		exitWithError(ErrorCode::FAILED_TO_WRITE_TO_OUTPUT_FILE);
 	}

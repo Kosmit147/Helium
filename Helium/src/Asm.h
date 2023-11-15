@@ -237,7 +237,7 @@ inline void Asm::exportSymbol(std::string_view name)
 
 inline void Asm::importSymbol(const Symbol& symbol)
 {
-	text << "global " << symbol.name << NL;
+	text << "extern " << symbol.name << NL;
 }
 
 inline void Asm::importSymbol(std::string_view name)
