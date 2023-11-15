@@ -107,9 +107,9 @@ public:
 	inline static void i_sub(Register r, u64 val);
 	inline static void i_xor(Register a, Register b);
 
-	[[nodiscard]] constexpr static std::string registerToString(Register r);
-	[[nodiscard]] constexpr static std::string segmentToString(Segment segment);
-	[[nodiscard]] constexpr static std::string addressingModeToString(AddressingMode mode);
+	[[nodiscard]] constexpr static const char* registerToString(Register r);
+	[[nodiscard]] constexpr static const char* segmentToString(Segment segment);
+	[[nodiscard]] constexpr static const char* addressingModeToString(AddressingMode mode);
 
 private:
 	static SegmentsData segmentsData;
@@ -141,7 +141,7 @@ inline std::ostream& operator<<(std::ostream& stream, Asm::Register r)
 
 inline void Asm::assembleIntoFile(std::string_view outputFileName)
 {
-	writeToFile(outputFileName, segmentsData);
+	writeToFile(outputFileName.data(), segmentsData);
 }
 
 inline void Asm::setUpShadowZone()
@@ -202,12 +202,12 @@ inline void Asm::newLine()
 
 inline void Asm::comment(std::string_view comment)
 {
-	text << ";" << comment << NL;
+	text << ";" << comment.data() << NL;
 }
 
 inline void Asm::insComment(std::string_view comment)
 {
-	text << TAB << ";" << comment << NL;
+	text << TAB << ";" << comment.data() << NL;
 }
 
 inline void Asm::setBits(usize bits)
@@ -302,7 +302,7 @@ inline void Asm::i_xor(Register a, Register b)
 	text << TAB << "xor " << a << ", " << b << NL;
 }
 
-constexpr std::string Asm::addressingModeToString(AddressingMode mode)
+constexpr const char* Asm::addressingModeToString(AddressingMode mode)
 {
 	switch (mode)
 	{
@@ -324,7 +324,7 @@ constexpr std::string Asm::addressingModeToString(AddressingMode mode)
 	return ERR_STR;
 }
 
-constexpr std::string Asm::segmentToString(Segment segment)
+constexpr const char* Asm::segmentToString(Segment segment)
 {
 	switch (segment)
 	{
@@ -343,7 +343,7 @@ constexpr std::string Asm::segmentToString(Segment segment)
 	return ERR_STR;
 }
 
-constexpr std::string Asm::registerToString(Register r)
+constexpr const char* Asm::registerToString(Register r)
 {
 	switch (r)
 	{
