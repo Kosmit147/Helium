@@ -1,3 +1,6 @@
+// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #pragma once
 
 #include <sstream>
@@ -174,6 +177,7 @@ inline void Asm::setArgInt(usize pos, u64 val)
 		break;
 	default:
 		HE_DEBUG_BREAK;
+		r = Register::RCX;
 		break;
 	}
 

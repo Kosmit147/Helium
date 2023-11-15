@@ -1,3 +1,6 @@
+// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "errorCodes.h"
 
 #include <string>
@@ -11,7 +14,7 @@ void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName,
 	std::string errorMsg;
 	std::string fileInfStr;
 
-	if (!fileInfStr.empty())
+	if (!fileName.empty())
 	{
 		fileInfStr = (std::string)fileName + ':'
 			+ std::to_string(row) + ':' + std::to_string(col);

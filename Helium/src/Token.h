@@ -1,3 +1,6 @@
+// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #pragma once
 
 #include <vector>
@@ -7,7 +10,7 @@
 
 #include "common.h"
 #include "HeType.h"
-#include "args.h"
+#include "Args.h"
 
 struct Literal
 {
