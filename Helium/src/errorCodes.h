@@ -15,6 +15,9 @@ enum class ErrorCode
 	I32_LITERAL_OUT_OF_RANGE,
 	UNEXPECTED_CHARACTER,
 	FAILED_TO_TOKENIZE,
+	INVALID_TOKEN,
+	EXPECTED_A_SEMICOLON,
+	SYNTAX_ERROR,
 };
 
 void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName = "", 

@@ -40,6 +40,15 @@ void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName,
 	case ErrorCode::FAILED_TO_TOKENIZE:
 		errorMsg = fileInfStr + ' ' + "Failed to tokenize.";
 		break;
+	case ErrorCode::INVALID_TOKEN:
+		errorMsg = fileInfStr + ' ' + "Parser encountered an invalid token.";
+		break;
+	case ErrorCode::EXPECTED_A_SEMICOLON:
+		errorMsg = fileInfStr + ' ' + "Expected a ';'.";
+		break;
+	case ErrorCode::SYNTAX_ERROR:
+		errorMsg = fileInfStr + ' ' + "Syntax error.";
+		break;
 	default:
 		errorMsg = ERR_STR;
 		HE_DEBUG_BREAK // Incorrect error code

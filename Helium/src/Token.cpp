@@ -25,6 +25,7 @@ usize Tokenizer::col = 0;
 usize Tokenizer::colOffset = 0;
 it Tokenizer::index = 0;
 const Args* Tokenizer::args;
+usize Tokenizer::semicolonCount = 0;
 
 const Token Token::errorToken = { TokenType::ERR, 0, 0 };
 
@@ -74,6 +75,11 @@ std::vector<Token> Tokenizer::tokenize(const Args& newArgs, std::string_view new
 	}
 
 	return tokens;
+}
+
+usize Tokenizer::getSemicolonCount()
+{
+	return semicolonCount;
 }
 
 Token Tokenizer::readKeywordOrVar()
@@ -160,9 +166,15 @@ Token Tokenizer::readSpecialChar()
 	auto search = Token::tokenTypeMap.find({ character });
 
 	if (search != Token::tokenTypeMap.end())
+	{
+		if (search->second == TokenType::SEMICOLON)
+			semicolonCount++;
 		return { search->second, row, index - colOffset };
+	}
 	else
+	{
 		exitWithError(ErrorCode::UNEXPECTED_CHARACTER, args->inputFile, row, col);
+	}
 
 	HE_DEBUG_BREAK;
 	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, args->inputFile, row, col);
