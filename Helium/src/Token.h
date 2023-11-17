@@ -30,7 +30,7 @@ struct Variable
 	const HeType type;
 	const std::string name;
 
-	Variable(HeType type, const std::string& name);
+	Variable(HeType type, std::string_view name);
 	Variable(HeType type, std::string&& name);
 };
 
@@ -57,14 +57,15 @@ struct Token
 	Token(TokenType tokenType, usize row, usize col);
 	Token(const Token& other);
 
-	Token& operator=(const Token& other);
-
 	static const Token errorToken;
 
 #ifdef _DEBUG
 	static const std::unordered_map<TokenType, std::string> tokenNameMap;
 	[[nodiscard]] static const char* getTokenStr(TokenType type);
 #endif
+
+private:
+	Token& operator=(const Token& other) = delete;
 };
 
 class Tokenizer

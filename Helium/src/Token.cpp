@@ -28,7 +28,7 @@ const Args* Tokenizer::args;
 
 const Token Token::errorToken = { TokenType::ERR, 0, 0 };
 
-Variable::Variable(HeType type, const std::string& name)
+Variable::Variable(HeType type, std::string_view name)
 	: type(type), name(name) {}
 
 Variable::Variable(HeType type, std::string&& name)
@@ -102,7 +102,7 @@ Token Tokenizer::readKeywordOrVar()
 			else
 			{
 				Token token(TokenType::VARIABLE, row, tokenStartCol);
-				token.variable = createPtr<Variable>(HeType::I32, tokenStr);
+				token.variable = createPtr<Variable>(HeType::I32, std::move(tokenStr));
 				return token;
 			}
 		}
@@ -180,14 +180,6 @@ Token::Token(const Token& other)
 
 	if (other.variable)
 		variable = createPtr<Variable>(other.variable->type, other.variable->name);
-}
-
-Token& Token::operator=(const Token& other)
-{
-	// can't assign a token to another token, because of
-	// const members
-	HE_DEBUG_BREAK;
-	return *this;
 }
 
 #ifdef _DEBUG

@@ -7,7 +7,7 @@
 
 #ifdef _DEBUG
 
-const char* getHeTypeStr(HeType type)
+constexpr const char* getHeTypeStr(HeType type)
 {
     switch (type)
     {
