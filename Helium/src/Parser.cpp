@@ -16,14 +16,14 @@ std::vector<Statement> Parser::parseTokens(const Args& args, const std::vector<T
 
 	std::vector<Statement> statements;
 	statements.reserve(Tokenizer::semicolonCount());
-	const Token* statementStart = &tokens[0];
+	const Token* stmtStartToken = &tokens[0];
 
 	for (const Token& token : tokens)
 	{
 		if (token.tokenType == TokenType::SEMICOLON)
 		{
-			statements.emplace_back(std::forward<Statement>(parseStatement(statementStart, &token)));
-			statementStart = (&token) + 1;
+			statements.emplace_back(std::forward<Statement>(parseStatement(stmtStartToken, &token)));
+			stmtStartToken = (&token) + 1;
 		}
 	}
 
@@ -62,7 +62,29 @@ Statement Parser::parseStatement(const Token* start, const Token* end)
 
 Expression Parser::parseExpr(const Token* start, const Token* end)
 {
-	// TODO
+	for (const Token* token = start; token <= end; token++)
+	{
+		switch (token->tokenType)
+		{
+		case TokenType::LITERAL:
+			break;
+		case TokenType::VARIABLE:
+			break;
+		case TokenType::OPEN_PAREN:
+			break;
+		case TokenType::CLOSE_PAREN:
+			break;
+		case TokenType::PLUS:
+			break;
+		case TokenType::MINUS:
+			break;
+		case TokenType::ASTERISK:
+			break;
+		case TokenType::FORWARD_SLASH:
+			break;
+		}
+	}
+
 	return Expression();
 }
 
@@ -75,7 +97,7 @@ Statement Parser::parseExit(const Token* start, const Token* end)
 
 	if (token == end)
 	{
-		exitWithError(ErrorCode::EXPECTED_AN_EXPRESSION, _args->inputFile, end->row, end->col);
+		exitWithError(ErrorCode::EXPECTED_AN_EXPRESSION, _args->inputFile, token->row, token->col);
 		return { StatementType::EMPTY };
 	}
 

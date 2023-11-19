@@ -63,6 +63,10 @@ struct Token
 		SEMICOLON,
 		OPEN_PAREN,
 		CLOSE_PAREN,
+		PLUS,
+		MINUS,
+		ASTERISK,
+		FORWARD_SLASH,
 		ASSIGN,
 		// when adding new tokens, update tokenTypeMap and tokenNameMap definitions
 	};

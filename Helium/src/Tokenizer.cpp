@@ -20,6 +20,10 @@ const std::unordered_map<std::string, TokenType> Token::tokenTypeMap =
 	{ "(", TokenType::OPEN_PAREN },
 	{ ")", TokenType::CLOSE_PAREN },
 	{ "=", TokenType::ASSIGN },
+	{ "+", TokenType::PLUS },
+	{ "-", TokenType::MINUS },
+	{ "*", TokenType::ASTERISK },
+	{ "/", TokenType::FORWARD_SLASH },
 };
 
 std::string_view Tokenizer::_input;
@@ -205,6 +209,10 @@ const std::unordered_map<TokenType, std::string> Token::tokenNameMap = {
 	{ TokenType::OPEN_PAREN, "openingParenthesis" },
 	{ TokenType::CLOSE_PAREN, "closingParenthesis" },
 	{ TokenType::ASSIGN, "assignment" },
+	{ TokenType::PLUS, "plus" },
+	{ TokenType::MINUS, "minus" },
+	{ TokenType::ASTERISK, "asterisk" },
+	{ TokenType::FORWARD_SLASH, "forwardSlash" },
 };
 
 const char* Token::getTokenStr(TokenType type)
