@@ -14,7 +14,7 @@ struct Args
 	std::string outputFile = "";
 };
 
-enum class ArgType
+enum class ArgType : u8
 {
 	NONE,
 	OUTPUT_FILE_NAME,

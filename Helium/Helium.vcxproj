@@ -101,7 +101,6 @@
     <ClCompile Include="src\Compiler.cpp" />
     <ClCompile Include="src\errorCodes.cpp" />
     <ClCompile Include="src\file.cpp" />
-    <ClCompile Include="src\HeType.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Statement.cpp" />
     <ClCompile Include="src\Token.cpp" />

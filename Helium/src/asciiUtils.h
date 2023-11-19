@@ -3,7 +3,9 @@
 
 #pragma once
 
-enum class CharacterType
+#include "common.h"
+
+enum class CharacterType : u8
 {
 	WHITESPACE,
 	ALPHABETIC,

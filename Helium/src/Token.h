@@ -36,7 +36,7 @@ struct Variable
 
 struct Token
 {
-	enum class TokenType
+	enum class TokenType : u8
 	{
 		ERR,
 		EXIT,
@@ -54,8 +54,8 @@ struct Token
 	const TokenType tokenType;
 	const usize row;
 	const usize col;
-	Ptr<Literal> literal;
-	Ptr<Variable> variable;
+	Ref<Literal> literal;
+	Ref<Variable> variable;
 
 	Token(TokenType tokenType, usize row, usize col);
 	Token(const Token& other);

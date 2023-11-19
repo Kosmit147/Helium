@@ -3,7 +3,7 @@
 
 #pragma once
 
-enum class HeType
+enum class HeType : u8
 {
 	I32
 };
@@ -12,6 +12,19 @@ enum class HeType
 
 #include <string>
 
-[[nodiscard]] constexpr const char* getHeTypeStr(HeType type);
+constexpr const char* getHeTypeStr(HeType type);
+
+[[nodiscard]] constexpr const char* getHeTypeStr(HeType type)
+{
+    switch (type)
+    {
+    case HeType::I32:
+        return "I32";
+        break;
+    }
+
+    HE_DEBUG_BREAK
+        return ERR_STR;
+}
 
 #endif
