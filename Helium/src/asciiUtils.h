@@ -5,7 +5,7 @@
 
 #include "common.h"
 
-enum class CharacterType : u8
+enum class CharacterType
 {
 	WHITESPACE,
 	ALPHABETIC,
@@ -14,6 +14,4 @@ enum class CharacterType : u8
 	OTHER,
 };
 
-[[nodiscard]] inline bool isWhiteSpace(char c);
-[[nodiscard]] inline bool isSpecialChar(char c);
 [[nodiscard]] CharacterType getCharacterType(char c);

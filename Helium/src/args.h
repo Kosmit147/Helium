@@ -6,7 +6,6 @@
 #include <string>
 
 #include "common.h"
-#include "errorCodes.h"
 
 struct Args
 {

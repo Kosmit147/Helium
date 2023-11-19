@@ -5,11 +5,11 @@
 
 #include "Asm.h"
 
-const Args* Compiler::args;
+const Args* Compiler::_args;
 
-void Compiler::compileIntoFile(const Args& newArgs, std::string_view fileName)
+void Compiler::compileIntoFile(const Args& args, std::string_view fileName)
 {
-	args = &newArgs;
+	_args = &args;
 
 	Asm::setBits(64);
 	Asm::setAddressingMode(Asm::AddressingMode::REL);

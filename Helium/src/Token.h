@@ -74,17 +74,17 @@ private:
 class Tokenizer
 {
 public:
-	[[nodiscard]] static std::vector<Token> tokenize(const Args& newArgs, std::string_view newInput);
-	[[nodiscard]] static usize getSemicolonCount();
+	[[nodiscard]] static std::vector<Token> tokenize(const Args& args, std::string_view input);
+	[[nodiscard]] inline static usize semicolonCount() { return _semicolonCount; }
 	
 private:
-	static std::string_view input;
-	static usize row;
-	static usize col;
-	static usize colOffset;
-	static it index;
-	static const Args* args;
-	static usize semicolonCount;
+	static std::string_view _input;
+	static usize _row;
+	static usize _col;
+	static usize _colOffset;
+	static it _index;
+	static const Args* _args;
+	static usize _semicolonCount;
 
 private:
 	[[nodiscard]] static Token readKeywordOrVar();

@@ -9,7 +9,7 @@
 
 #include "common.h"
 #include "asciiUtils.h"
-#include "errorCodes.h"
+#include "error.h"
 
 using TokenType = Token::TokenType;
 
@@ -22,13 +22,13 @@ const std::unordered_map<std::string, TokenType> Token::tokenTypeMap =
 	{ "=", TokenType::ASSIGN },
 };
 
-std::string_view Tokenizer::input;
-usize Tokenizer::row = 0;
-usize Tokenizer::col = 0;
-usize Tokenizer::colOffset = 0;
-it Tokenizer::index = 0;
-const Args* Tokenizer::args;
-usize Tokenizer::semicolonCount = 0;
+std::string_view Tokenizer::_input;
+usize Tokenizer::_row = 0;
+usize Tokenizer::_col = 0;
+usize Tokenizer::_colOffset = 0;
+it Tokenizer::_index = 0;
+const Args* Tokenizer::_args;
+usize Tokenizer::_semicolonCount = 0;
 
 const Token Token::errorToken = { TokenType::ERR, 0, 0 };
 
@@ -38,22 +38,22 @@ Variable::Variable(HeType type, std::string_view name)
 Variable::Variable(HeType type, std::string&& name)
 	: type(type), name(std::move(name)) {}
 
-std::vector<Token> Tokenizer::tokenize(const Args& newArgs, std::string_view newInput)
+std::vector<Token> Tokenizer::tokenize(const Args& args, std::string_view input)
 {
-	args = &newArgs;
-	input = newInput;
+	_args = &args;
+	_input = input;
 
 	std::vector<Token> tokens;
 
-	for (; index < input.length(); index++)
+	for (; _index < _input.length(); _index++)
 	{
-		char character = input[index];
+		char character = _input[_index];
 		CharacterType type = getCharacterType(character);
 
 		if (character == '\n')
 		{
-			colOffset += index + 1;
-			row++;
+			_colOffset += _index + 1;
+			_row++;
 			continue;
 		}
 		else if (type == CharacterType::WHITESPACE)
@@ -80,19 +80,14 @@ std::vector<Token> Tokenizer::tokenize(const Args& newArgs, std::string_view new
 	return tokens;
 }
 
-usize Tokenizer::getSemicolonCount()
-{
-	return semicolonCount;
-}
-
 Token Tokenizer::readKeywordOrVar()
 {
-	usize tokenStartCol = index - colOffset;
+	usize tokenStartCol = _index - _colOffset;
 	std::string tokenStr = "";
 	
-	for (; index < input.length(); index++)
+	for (; _index < _input.length(); _index++)
 	{
-		char character = input[index];
+		char character = _input[_index];
 		CharacterType type = getCharacterType(character);
 
 		if (type == CharacterType::ALPHABETIC || type == CharacterType::DIGIT)
@@ -101,35 +96,35 @@ Token Tokenizer::readKeywordOrVar()
 		}
 		else
 		{
-			index--;
+			_index--;
 
 			auto search = Token::tokenTypeMap.find(tokenStr);
 			if (search != Token::tokenTypeMap.end())
 			{
-				return { search->second, row, tokenStartCol };
+				return { search->second, _row, tokenStartCol };
 			}
 			else
 			{
-				Token token(TokenType::VARIABLE, row, tokenStartCol);
-				token.variable = createPtr<Variable>(HeType::I32, std::move(tokenStr));
+				Token token(TokenType::VARIABLE, _row, tokenStartCol);
+				token.variable = createRef<Variable>(HeType::I32, std::move(tokenStr));
 				return token;
 			}
 		}
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, args->inputFile, row, tokenStartCol);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _args->inputFile, _row, tokenStartCol);
 	return Token::errorToken;
 }
 
 Token Tokenizer::readI32Literal()
 {
-	usize tokenStartCol = index - colOffset;
+	usize tokenStartCol = _index - _colOffset;
 
 	std::string tokenStr = "";
-	for (; index < input.length(); index++)
+	for (; _index < _input.length(); _index++)
 	{
-		char character = input[index];
+		char character = _input[_index];
 		CharacterType type = getCharacterType(character);
 
 		if (type == CharacterType::DIGIT)
@@ -138,7 +133,7 @@ Token Tokenizer::readI32Literal()
 		}
 		else
 		{
-			index--;
+			_index--;
 
 			i32 value;
 
@@ -148,39 +143,39 @@ Token Tokenizer::readI32Literal()
 			}
 			catch (std::out_of_range&)
 			{
-				exitWithError(ErrorCode::I32_LITERAL_OUT_OF_RANGE, args->inputFile, row, tokenStartCol);
+				exitWithError(ErrorCode::I32_LITERAL_OUT_OF_RANGE, _args->inputFile, _row, tokenStartCol);
 			}
 
-			Token token(TokenType::LITERAL, row, tokenStartCol);
-			token.literal = createPtr<Literal>(HeType::I32, value);
+			Token token(TokenType::LITERAL, _row, tokenStartCol);
+			token.literal = createRef<Literal>(HeType::I32, value);
 			return token;
 		}
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, args->inputFile, row, tokenStartCol);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _args->inputFile, _row, tokenStartCol);
 	return Token::errorToken;
 }
 
 Token Tokenizer::readSpecialChar()
 {
-	char character = input[index];
+	char character = _input[_index];
 
 	auto search = Token::tokenTypeMap.find({ character });
 
 	if (search != Token::tokenTypeMap.end())
 	{
 		if (search->second == TokenType::SEMICOLON)
-			semicolonCount++;
-		return { search->second, row, index - colOffset };
+			_semicolonCount++;
+		return { search->second, _row, _index - _colOffset };
 	}
 	else
 	{
-		exitWithError(ErrorCode::UNEXPECTED_CHARACTER, args->inputFile, row, col);
+		exitWithError(ErrorCode::UNEXPECTED_CHARACTER, _args->inputFile, _row, _col);
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, args->inputFile, row, col);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _args->inputFile, _row, _col);
 	return Token::errorToken;
 }
 
@@ -191,10 +186,10 @@ Token::Token(const Token& other)
 	: tokenType(other.tokenType), row(other.row), col(other.col)
 {
 	if (other.literal)
-		literal = createPtr<Literal>(other.literal->type, other.literal->value);
+		literal = createRef<Literal>(other.literal->type, other.literal->value);
 
 	if (other.variable)
-		variable = createPtr<Variable>(other.variable->type, other.variable->name);
+		variable = createRef<Variable>(other.variable->type, other.variable->name);
 }
 
 #ifdef _DEBUG

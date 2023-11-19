@@ -3,7 +3,7 @@
 
 #include "asciiUtils.h"
 
-inline bool isWhiteSpace(char c)
+[[nodiscard]] inline static bool isWhiteSpace(char c)
 {
 	static constexpr char whiteSpaceChars[] = {
 		' ', '\f', '\n',
@@ -17,7 +17,7 @@ inline bool isWhiteSpace(char c)
 	return false;
 };
 
-inline bool isSpecialChar(char c)
+[[nodiscard]] inline static bool isSpecialChar(char c)
 {
 	return	(c >= ' ' && c <= '/') ||
 		(c >= ':' && c <= '@') ||

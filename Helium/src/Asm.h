@@ -112,10 +112,10 @@ public:
 	[[nodiscard]] constexpr static const char* addressingModeToString(AddressingMode mode);
 
 private:
-	static SegmentsData segmentsData;
-	static std::stringstream& bss;
-	static std::stringstream& data;
-	static std::stringstream& text;
+	static SegmentsData _segmentsData;
+	static std::stringstream& _bss;
+	static std::stringstream& _data;
+	static std::stringstream& _text;
 
 public:
 	Asm() = delete;
@@ -141,7 +141,7 @@ inline std::ostream& operator<<(std::ostream& stream, Asm::Register r)
 
 inline void Asm::assembleIntoFile(std::string_view outputFileName)
 {
-	writeToFile(outputFileName.data(), segmentsData);
+	writeToFile(outputFileName.data(), _segmentsData);
 }
 
 inline void Asm::setUpShadowZone()
@@ -197,109 +197,109 @@ inline void Asm::setReturnInt(u64 val)
 
 inline void Asm::newLine()
 {
-	text << NL;
+	_text << NL;
 }
 
 inline void Asm::comment(std::string_view comment)
 {
-	text << ";" << comment.data() << NL;
+	_text << ";" << comment.data() << NL;
 }
 
 inline void Asm::insComment(std::string_view comment)
 {
-	text << TAB << ";" << comment.data() << NL;
+	_text << TAB << ";" << comment.data() << NL;
 }
 
 inline void Asm::setBits(usize bits)
 {
-	text << "bits " << bits << NL;
+	_text << "bits " << bits << NL;
 }
 
 inline void Asm::setAddressingMode(AddressingMode mode)
 {
-	text << "default " << mode << NL;
+	_text << "default " << mode << NL;
 }
 
 inline void Asm::setSegment(Segment segment)
 {
-	text << "segment " << segment << NL;
+	_text << "segment " << segment << NL;
 }
 
 inline void Asm::exportSymbol(const Symbol& symbol)
 {
-	text << "global " << symbol.name << NL;
+	_text << "global " << symbol.name << NL;
 }
 
 inline void Asm::exportSymbol(std::string_view name)
 {
-	text << "global " << name.data() << NL;
+	_text << "global " << name.data() << NL;
 }
 
 inline void Asm::importSymbol(const Symbol& symbol)
 {
-	text << "extern " << symbol.name << NL;
+	_text << "extern " << symbol.name << NL;
 }
 
 inline void Asm::importSymbol(std::string_view name)
 {
-	text << "extern " << name.data() << NL;
+	_text << "extern " << name.data() << NL;
 }
 
 inline void Asm::call(const Symbol& symbol)
 {
-	text << TAB << "call " << symbol.name << NL;
+	_text << TAB << "call " << symbol.name << NL;
 }
 
 inline void Asm::call(std::string_view name)
 {
-	text << TAB << "call " << name.data() << NL;
+	_text << TAB << "call " << name.data() << NL;
 }
 
 inline void Asm::call(const Symbol& symbol, u64 val)
 {
 	setArgInt(0, val);
-	text << TAB << "call " << symbol.name << NL;
+	_text << TAB << "call " << symbol.name << NL;
 }
 
 inline void Asm::call(std::string_view name, u64 val)
 {
 	setArgInt(0, val);
-	text << TAB << "call " << name.data() << NL;
+	_text << TAB << "call " << name.data() << NL;
 }
 
 inline void Asm::setLabel(const Symbol& symbol)
 {
-	text << symbol.name << ':' << NL;
+	_text << symbol.name << ':' << NL;
 }
 
 inline void Asm::setLabel(std::string_view name)
 {
-	text << name.data() << ':' << NL;
+	_text << name.data() << ':' << NL;
 }
 
 inline void Asm::i_push(Register r)
 {
-	text << TAB << "push " << r << NL;
+	_text << TAB << "push " << r << NL;
 }
 
 inline void Asm::i_mov(Register dst, Register src)
 {
-	text << TAB << "mov " << dst << ", " << src << NL;
+	_text << TAB << "mov " << dst << ", " << src << NL;
 }
 
 inline void Asm::i_mov(Register r, u64 val)
 {
-	text << TAB << "mov " << r << ", " << val << NL;
+	_text << TAB << "mov " << r << ", " << val << NL;
 }
 
 inline void Asm::i_sub(Register r, u64 val)
 {
-	text << TAB << "sub " << r << ", " << val << NL;
+	_text << TAB << "sub " << r << ", " << val << NL;
 }
 
 inline void Asm::i_xor(Register a, Register b)
 {
-	text << TAB << "xor " << a << ", " << b << NL;
+	_text << TAB << "xor " << a << ", " << b << NL;
 }
 
 constexpr const char* Asm::addressingModeToString(AddressingMode mode)

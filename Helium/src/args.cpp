@@ -6,6 +6,7 @@
 #include <string>
 
 #include "log.h"
+#include "error.h"
 
 Args parseArgs(int argc, char* argv[])
 {

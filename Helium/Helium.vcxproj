@@ -99,7 +99,7 @@
     <ClCompile Include="src\asciiUtils.cpp" />
     <ClCompile Include="src\Asm.cpp" />
     <ClCompile Include="src\Compiler.cpp" />
-    <ClCompile Include="src\errorCodes.cpp" />
+    <ClCompile Include="src\error.cpp" />
     <ClCompile Include="src\file.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Statement.cpp" />
@@ -111,7 +111,7 @@
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\Asm.h" />
     <ClInclude Include="src\Compiler.h" />
-    <ClInclude Include="src\errorCodes.h" />
+    <ClInclude Include="src\error.h" />
     <ClInclude Include="src\file.h" />
     <ClInclude Include="src\HeType.h" />
     <ClInclude Include="src\log.h" />

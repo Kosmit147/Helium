@@ -24,7 +24,7 @@
     <ClCompile Include="src\Token.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\errorCodes.cpp">
+    <ClCompile Include="src\error.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\asciiUtils.cpp">
@@ -56,7 +56,7 @@
     <ClInclude Include="src\Args.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\errorCodes.h">
+    <ClInclude Include="src\error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Token.h">

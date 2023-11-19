@@ -3,7 +3,9 @@
 
 #include "file.h"
 
-#include "errorCodes.h"
+#include <fstream>
+
+#include "error.h"
 
 std::stringstream readFile(std::string_view fileName)
 {

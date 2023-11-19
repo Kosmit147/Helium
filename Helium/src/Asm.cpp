@@ -3,9 +3,9 @@
 
 #include "Asm.h"
 
-SegmentsData Asm::segmentsData{};
-std::stringstream& Asm::bss = Asm::segmentsData.bss;
-std::stringstream& Asm::data = Asm::segmentsData.data;
-std::stringstream& Asm::text = Asm::segmentsData.text;
+SegmentsData Asm::_segmentsData{};
+std::stringstream& Asm::_bss = Asm::_segmentsData.bss;
+std::stringstream& Asm::_data = Asm::_segmentsData.data;
+std::stringstream& Asm::_text = Asm::_segmentsData.text;
 
 Asm::Symbol::Symbol(std::string&& name) : name(std::move(name)) {}

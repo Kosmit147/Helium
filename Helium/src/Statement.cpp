@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 #include "Statement.h"
+#include "error.h"
 
 using TokenType = Token::TokenType;
 using ExprType = Expression::Type;
@@ -14,7 +15,7 @@ std::vector<Statement> parseTokens(const Args& setArgs, const std::vector<Token>
 	args = &setArgs;
 
 	std::vector<Statement> statements;
-	statements.reserve(Tokenizer::getSemicolonCount());
+	statements.reserve(Tokenizer::semicolonCount());
 	const Token* statementStart = &tokens[0];
 
 	for (const Token& token : tokens)

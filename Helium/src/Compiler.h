@@ -8,8 +8,8 @@
 class Compiler
 {
 public:
-	static void compileIntoFile(const Args& newArgs, std::string_view fileName);
+	static void compileIntoFile(const Args& args, std::string_view fileName);
 
 private:
-	static const Args* args;
+	static const Args* _args;
 };
