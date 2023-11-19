@@ -104,7 +104,7 @@ Statement parseAssign(const Token* start, const Token* end)
 	statement.type = StatementType::ASSIGN;
 	statement.a = createPtr<Expression>();
 	statement.a->type = ExprType::VARIABLE;
-	statement.a->variable = createPtr<Variable>(start->variable);
+	statement.a->variable = start->variable; // TODO
 	statement.b = createPtr<Expression>(std::forward<Expression>(parseExpr(token + 1, end)));
 
 	return statement;

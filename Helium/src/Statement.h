@@ -9,7 +9,7 @@
 
 struct Expression
 {
-	enum class Type
+	enum class Type : u8
 	{
 		ERR_TYPE,
 		VALUE,
@@ -22,15 +22,15 @@ struct Expression
 	};
 
 	Type type = Type::ERR_TYPE;
-	Ptr<Literal> value = nullptr;
-	Ptr<Variable> variable = nullptr;
+	Ref<Literal> value = nullptr;
+	Ref<Variable> variable = nullptr;
 	Ptr<Expression> a = nullptr;
 	Ptr<Expression> b = nullptr;
 };
 
 struct Statement
 {
-	enum class Type
+	enum class Type : u8
 	{
 		EMPTY,
 		EXIT,
