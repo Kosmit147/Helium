@@ -39,7 +39,7 @@ struct Literal
 	template<typename T>
 	inline T getValue() const
 	{
-		return *(T*)(&value);
+		return (T)value;
 	}
 };
 
