@@ -27,7 +27,7 @@ usize Tokenizer::_row = 0;
 usize Tokenizer::_col = 0;
 usize Tokenizer::_colOffset = 0;
 it Tokenizer::_index = 0;
-const Args* Tokenizer::_args;
+const Args* Tokenizer::_args = nullptr;
 usize Tokenizer::_semicolonCount = 0;
 
 const Token Token::errorToken = { TokenType::ERR, 0, 0 };

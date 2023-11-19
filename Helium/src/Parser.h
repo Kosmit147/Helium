@@ -42,10 +42,16 @@ struct Statement
 	Ptr<Expression> b = nullptr;
 };
 
-// TODO: make this into a class with static functions
+class Parser
+{
+public:
+	[[nodiscard]] static std::vector<Statement> parseTokens(const Args& setArgs, 
+		const std::vector<Token>& tokens);
+	[[nodiscard]] static Statement parseStatement(const Token* start, const Token* end);
+	[[nodiscard]] static Expression parseExpr(const Token* start, const Token* end);
+	[[nodiscard]] static Statement parseExit(const Token* start, const Token* end);
+	[[nodiscard]] static Statement parseAssign(const Token* start, const Token* end);
 
-[[nodiscard]] std::vector<Statement> parseTokens(const Args& setArgs, const std::vector<Token>& tokens);
-[[nodiscard]] Statement parseStatement(const Token* start, const Token* end);
-[[nodiscard]] Expression parseExpr(const Token* start, const Token* end);
-[[nodiscard]] Statement parseExit(const Token* start, const Token* end);
-[[nodiscard]] Statement parseAssign(const Token* start, const Token* end);
+private:
+	static const Args* _args;
+};

@@ -5,7 +5,7 @@
 
 #include "Asm.h"
 
-const Args* Compiler::_args;
+const Args* Compiler::_args = nullptr;
 
 void Compiler::compileIntoFile(const Args& args, std::string_view fileName)
 {

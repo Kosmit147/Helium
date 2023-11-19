@@ -8,12 +8,11 @@ using TokenType = Token::TokenType;
 using ExprType = Expression::Type;
 using StatementType = Statement::Type;
 
-// TODO: move this into Parser class
-static const Args* args = nullptr;
+const Args* Parser::_args = nullptr;
 
-std::vector<Statement> parseTokens(const Args& setArgs, const std::vector<Token>& tokens)
+std::vector<Statement> Parser::parseTokens(const Args& args, const std::vector<Token>& tokens)
 {
-	args = &setArgs;
+	_args = &args;
 
 	std::vector<Statement> statements;
 	statements.reserve(Tokenizer::semicolonCount());
@@ -31,12 +30,12 @@ std::vector<Statement> parseTokens(const Args& setArgs, const std::vector<Token>
 	const Token& lastToken = tokens.back();
 
 	if (lastToken.tokenType != TokenType::SEMICOLON)
-		exitWithError(ErrorCode::EXPECTED_A_SEMICOLON, args->inputFile, lastToken.col, lastToken.row);
+		exitWithError(ErrorCode::EXPECTED_A_SEMICOLON, _args->inputFile, lastToken.col, lastToken.row);
 
 	return statements;
 }
 
-Statement parseStatement(const Token* start, const Token* end)
+Statement Parser::parseStatement(const Token* start, const Token* end)
 {
 	switch (start->tokenType)
 	{
@@ -51,23 +50,23 @@ Statement parseStatement(const Token* start, const Token* end)
 		break;
 	case TokenType::ERR:
 		HE_DEBUG_BREAK;
-		exitWithError(ErrorCode::INVALID_TOKEN, args->inputFile, start->row, start->col);
+		exitWithError(ErrorCode::INVALID_TOKEN, _args->inputFile, start->row, start->col);
 		return { StatementType::EMPTY };
 		break;
 	default:
-		exitWithError(ErrorCode::SYNTAX_ERROR, args->inputFile, start->row, start->col);
+		exitWithError(ErrorCode::SYNTAX_ERROR, _args->inputFile, start->row, start->col);
 		return { StatementType::EMPTY };
 		break;
 	}
 }
 
-Expression parseExpr(const Token* start, const Token* end)
+Expression Parser::parseExpr(const Token* start, const Token* end)
 {
 	// TODO
 	return Expression();
 }
 
-Statement parseExit(const Token* start, const Token* end)
+Statement Parser::parseExit(const Token* start, const Token* end)
 {
 	Statement statement;
 
@@ -76,7 +75,7 @@ Statement parseExit(const Token* start, const Token* end)
 
 	if (token == end)
 	{
-		exitWithError(ErrorCode::EXPECTED_AN_EXPRESSION, args->inputFile, end->row, end->col);
+		exitWithError(ErrorCode::EXPECTED_AN_EXPRESSION, _args->inputFile, end->row, end->col);
 		return { StatementType::EMPTY };
 	}
 
@@ -86,7 +85,7 @@ Statement parseExit(const Token* start, const Token* end)
 	return statement;
 }
 
-Statement parseAssign(const Token* start, const Token* end)
+Statement Parser::parseAssign(const Token* start, const Token* end)
 {
 	Statement statement;
 
@@ -96,7 +95,7 @@ Statement parseAssign(const Token* start, const Token* end)
 	if (token >= end || token->tokenType != TokenType::ASSIGN)
 	{
 		HE_DEBUG_BREAK;
-		exitWithError(ErrorCode::EXPECTED_EQUALS, args->inputFile, token->row, token->col);
+		exitWithError(ErrorCode::EXPECTED_EQUALS, _args->inputFile, token->row, token->col);
 		return { StatementType::EMPTY };
 	}
 
@@ -106,7 +105,7 @@ Statement parseAssign(const Token* start, const Token* end)
 	statement.type = StatementType::ASSIGN;
 	statement.a = createPtr<Expression>();
 	statement.a->type = ExprType::VARIABLE;
-	statement.a->variable = start->variable; // TODO
+	statement.a->variable = start->variable;
 	statement.b = createPtr<Expression>(std::forward<Expression>(parseExpr(token + 1, end)));
 
 	return statement;
