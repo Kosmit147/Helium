@@ -14,7 +14,6 @@
 
 struct Literal
 {
-public:
 	const HeType type;
 	const std::variant<i32> value;
 

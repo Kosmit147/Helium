@@ -5,7 +5,7 @@
 
 #include "common.h"
 #include "Args.h"
-#include "Token.h"
+#include "Tokenizer.h"
 #include "Compiler.h"
 #include "file.h"
 #include "log.h"

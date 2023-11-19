@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include "Token.h"
+#include "Tokenizer.h"
 
 struct Expression
 {
@@ -41,6 +41,8 @@ struct Statement
 	Ptr<Expression> a = nullptr;
 	Ptr<Expression> b = nullptr;
 };
+
+// TODO: make this into a class with static functions
 
 [[nodiscard]] std::vector<Statement> parseTokens(const Args& setArgs, const std::vector<Token>& tokens);
 [[nodiscard]] Statement parseStatement(const Token* start, const Token* end);

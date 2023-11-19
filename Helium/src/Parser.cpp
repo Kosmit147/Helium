@@ -1,13 +1,14 @@
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-#include "Statement.h"
+#include "Parser.h"
 #include "error.h"
 
 using TokenType = Token::TokenType;
 using ExprType = Expression::Type;
 using StatementType = Statement::Type;
 
+// TODO: move this into Parser class
 static const Args* args = nullptr;
 
 std::vector<Statement> parseTokens(const Args& setArgs, const std::vector<Token>& tokens)

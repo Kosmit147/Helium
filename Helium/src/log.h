@@ -20,7 +20,7 @@ inline void printHelp()
 #include <vector>
 
 #include "common.h"
-#include "Token.h"
+#include "Tokenizer.h"
 
 inline std::ostream& operator<<(std::ostream& stream, const Literal& literal)
 {
