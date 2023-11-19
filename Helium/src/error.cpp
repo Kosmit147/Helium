@@ -55,6 +55,9 @@ void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName,
 	case ErrorCode::SYNTAX_ERROR:
 		errorMsg = fileInfStr + ' ' + "Syntax error.";
 		break;
+	case ErrorCode::INCORRECT_LITERAL_TYPE:
+		errorMsg = "Incorrect literal type.";
+		break;
 	default:
 		errorMsg = ERR_STR;
 		HE_DEBUG_BREAK // Incorrect error code

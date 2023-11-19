@@ -20,6 +20,7 @@ enum class ErrorCode
 	EXPECTED_EQUALS,
 	EXPECTED_AN_EXPRESSION,
 	SYNTAX_ERROR,
+	INCORRECT_LITERAL_TYPE,
 };
 
 void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName = "", 

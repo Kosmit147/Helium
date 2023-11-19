@@ -11,16 +11,35 @@
 #include "common.h"
 #include "HeType.h"
 #include "Args.h"
+#include "error.h"
 
 struct Literal
 {
 	const HeType type;
-	const std::variant<i32> value;
+
+	union {
+		i32 value;
+	};
+
+	template<typename T>
+	inline Literal(HeType type, T newVal) : type(type)
+	{
+		switch (type)
+		{
+		case HeType::I32:
+			value = newVal;
+			break;
+		default:
+			HE_DEBUG_BREAK;
+			exitWithError(ErrorCode::INCORRECT_LITERAL_TYPE);
+			break;
+		}
+	}
 
 	template<typename T>
 	inline T getValue() const
 	{
-		return std::get<T>(value);
+		return *(T*)(&value);
 	}
 };
 
