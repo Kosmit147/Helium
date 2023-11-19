@@ -22,7 +22,7 @@ std::vector<Statement> parseTokens(const Args& setArgs, const std::vector<Token>
 	{
 		if (token.tokenType == TokenType::SEMICOLON)
 		{
-			statements.push_back(std::move(parseStatement(statementStart, &token)));
+			statements.emplace_back(std::forward<Statement>(parseStatement(statementStart, &token)));
 			statementStart = (&token) + 1;
 		}
 	}
