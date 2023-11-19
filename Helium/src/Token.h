@@ -43,6 +43,9 @@ struct Token
 		LITERAL,
 		VARIABLE,
 		SEMICOLON,
+		OPEN_PAREN,
+		CLOSE_PAREN,
+		ASSIGN,
 		// when adding new tokens, update tokenTypeMap and tokenNameMap definitions
 	};
 

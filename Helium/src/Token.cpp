@@ -17,6 +17,9 @@ const std::unordered_map<std::string, TokenType> Token::tokenTypeMap =
 {
 	{ "exit", TokenType::EXIT },
 	{ ";", TokenType::SEMICOLON },
+	{ "(", TokenType::OPEN_PAREN },
+	{ ")", TokenType::CLOSE_PAREN },
+	{ "=", TokenType::ASSIGN },
 };
 
 std::string_view Tokenizer::input;
@@ -60,17 +63,17 @@ std::vector<Token> Tokenizer::tokenize(const Args& newArgs, std::string_view new
 		else if (type == CharacterType::ALPHABETIC)
 		{
 			// we are reading either a keyword or a variable name
-			tokens.push_back(std::forward<Token>(readKeywordOrVar()));
+			tokens.push_back(std::move(readKeywordOrVar()));
 		}
 		else if (type == CharacterType::DIGIT)
 		{
 			// int literal
-			tokens.push_back(std::forward<Token>(readI32Literal()));
+			tokens.push_back(std::move(readI32Literal()));
 		}
 		else if (type == CharacterType::SPECIAL_CHAR)
 		{
 			// special character
-			tokens.push_back(std::forward<Token>(readSpecialChar()));
+			tokens.push_back(std::move(readSpecialChar()));
 		}
 	}
 
@@ -204,6 +207,9 @@ const std::unordered_map<TokenType, std::string> Token::tokenNameMap = {
 	{ TokenType::LITERAL, "literal" },
 	{ TokenType::VARIABLE, "variable" },
 	{ TokenType::SEMICOLON, "semicolon" },
+	{ TokenType::OPEN_PAREN, "openingParenthesis" },
+	{ TokenType::CLOSE_PAREN, "closingParenthesis" },
+	{ TokenType::ASSIGN, "assignment" },
 };
 
 const char* Token::getTokenStr(TokenType type)

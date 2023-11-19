@@ -46,6 +46,12 @@ void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName,
 	case ErrorCode::EXPECTED_A_SEMICOLON:
 		errorMsg = fileInfStr + ' ' + "Expected a ';'.";
 		break;
+	case ErrorCode::EXPECTED_EQUALS:
+		errorMsg = fileInfStr + ' ' + "Expected an '='.";
+		break;
+	case ErrorCode::EXPECTED_AN_EXPRESSION:
+		errorMsg = fileInfStr + ' ' + "Expected an expression.";
+		break;
 	case ErrorCode::SYNTAX_ERROR:
 		errorMsg = fileInfStr + ' ' + "Syntax error.";
 		break;

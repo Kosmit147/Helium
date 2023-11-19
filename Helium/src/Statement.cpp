@@ -36,55 +36,76 @@ std::vector<Statement> parseTokens(const Args& setArgs, const std::vector<Token>
 
 Statement parseStatement(const Token* start, const Token* end)
 {
-	Statement statement;
-
 	switch (start->tokenType)
 	{
 	case TokenType::SEMICOLON:
-		statement.type = StatementType::EMPTY;
+		return { StatementType::EMPTY };
 		break;
 	case TokenType::EXIT:
-		statement.type = StatementType::EXIT;
+		return parseExit(start, end);
 		break;
 	case TokenType::VARIABLE:
-		statement.type = StatementType::ASSIGN;
+		return parseAssign(start, end);
 		break;
 	case TokenType::ERR:
 		HE_DEBUG_BREAK;
 		exitWithError(ErrorCode::INVALID_TOKEN, args->inputFile, start->row, start->col);
+		return { StatementType::EMPTY };
 		break;
 	default:
 		exitWithError(ErrorCode::SYNTAX_ERROR, args->inputFile, start->row, start->col);
+		return { StatementType::EMPTY };
 		break;
 	}
-
-	for (const Token* token = start; token <= end; token++)
-	{
-		switch (token->tokenType)
-		{
-		case TokenType::SEMICOLON:
-			continue;
-		case TokenType::VARIABLE:
-			// TODO
-			break;
-		case TokenType::LITERAL:
-			// TODO
-			break;
-		case TokenType::ERR:
-			HE_DEBUG_BREAK;
-			exitWithError(ErrorCode::INVALID_TOKEN, args->inputFile, token->row, token->col);
-			break;
-		default:
-			exitWithError(ErrorCode::SYNTAX_ERROR, args->inputFile, token->row, token->col);
-			break;
-		}
-	}
-
-	return statement;
 }
 
 Expression parseExpr(const Token* start, const Token* end)
 {
 	// TODO
 	return Expression();
+}
+
+Statement parseExit(const Token* start, const Token* end)
+{
+	Statement statement;
+
+	// *start is definitely an exit token
+	const Token* token = start + 1;
+
+	if (token == end)
+	{
+		exitWithError(ErrorCode::EXPECTED_AN_EXPRESSION, args->inputFile, end->row, end->col);
+		return { StatementType::EMPTY };
+	}
+
+	statement.type = StatementType::EXIT;
+	statement.a = createPtr<Expression>(std::forward<Expression>(parseExpr(token, end)));
+
+	return statement;
+}
+
+Statement parseAssign(const Token* start, const Token* end)
+{
+	Statement statement;
+
+	// *start is definitely a variable token
+	const Token* token = start + 1;
+
+	if (token >= end || token->tokenType != TokenType::ASSIGN)
+	{
+		HE_DEBUG_BREAK;
+		exitWithError(ErrorCode::EXPECTED_EQUALS, args->inputFile, token->row, token->col);
+		return { StatementType::EMPTY };
+	}
+
+	// a - variable to assign an expression to
+	// b - the expression
+
+	statement.type = StatementType::ASSIGN;
+	statement.a = createPtr<Expression>();
+	statement.a->type = ExprType::VARIABLE;
+	statement.a->variable = createPtr<Variable>(start->variable);
+	statement.b = createPtr<Expression>(std::forward<Expression>(parseExpr(token + 1, end)));
+
+	return statement;
 }

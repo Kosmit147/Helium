@@ -11,6 +11,7 @@ struct Expression
 {
 	enum class Type
 	{
+		ERR_TYPE,
 		VALUE,
 		VARIABLE,
 		ADD,
@@ -20,11 +21,11 @@ struct Expression
 		MOD,
 	};
 
-	Type type;
-	Ptr<Literal> value;
-	Ptr<Variable> variable;
-	Ptr<Expression> a;
-	Ptr<Expression> b;
+	Type type = Type::ERR_TYPE;
+	Ptr<Literal> value = nullptr;
+	Ptr<Variable> variable = nullptr;
+	Ptr<Expression> a = nullptr;
+	Ptr<Expression> b = nullptr;
 };
 
 struct Statement
@@ -36,11 +37,13 @@ struct Statement
 		ASSIGN,
 	};
 
-	Type type;
-	Ptr<Expression> a;
-	Ptr<Expression> b;
+	Type type = Type::EMPTY;
+	Ptr<Expression> a = nullptr;
+	Ptr<Expression> b = nullptr;
 };
 
 [[nodiscard]] std::vector<Statement> parseTokens(const Args& setArgs, const std::vector<Token>& tokens);
 [[nodiscard]] Statement parseStatement(const Token* start, const Token* end);
 [[nodiscard]] Expression parseExpr(const Token* start, const Token* end);
+[[nodiscard]] Statement parseExit(const Token* start, const Token* end);
+[[nodiscard]] Statement parseAssign(const Token* start, const Token* end);
