@@ -103,9 +103,11 @@
     <ClCompile Include="src\file.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Parser.cpp" />
+    <ClCompile Include="src\Token.cpp" />
     <ClCompile Include="src\Tokenizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Arena.h" />
     <ClInclude Include="src\args.h" />
     <ClInclude Include="src\asciiUtils.h" />
     <ClInclude Include="src\common.h" />
@@ -118,7 +120,9 @@
     <ClInclude Include="src\SegmentsData.h" />
     <ClInclude Include="src\Parser.h" />
     <ClInclude Include="src\Stack.h" />
+    <ClInclude Include="src\Token.h" />
     <ClInclude Include="src\Tokenizer.h" />
+    <ClInclude Include="src\TokensData.h" />
     <ClInclude Include="src\typeDefs.h" />
     <ClInclude Include="src\debug.h" />
   </ItemGroup>
