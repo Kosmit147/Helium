@@ -62,17 +62,48 @@ Statement Parser::parseStatement(const Token* start, const Token* end)
 
 Expression Parser::parseExpr(const Token* start, const Token* end)
 {
+	if (start->tokenType == TokenType::OPEN_PAREN &&
+		end->tokenType == TokenType::CLOSE_PAREN)
+	{
+		// "(...)"
+		if (end - start >= 2)
+		{
+			start++;
+			end--;
+		}
+		// empty expression "()"
+		else
+		{
+			return { ExprType::EMPTY };
+		}
+	}
+
+	auto findClosingParen = [&](const Token* openParen)
+	{
+		for (const Token* i = openParen + 1; i <= end; i++)
+			if (i->tokenType == TokenType::CLOSE_PAREN)
+				return i;
+
+		exitWithError(ErrorCode::EXPECTED_A_CLOSING_PAREN, _args->inputFile, openParen->row, openParen->col);
+	};
+
+	Expression expr;
+
 	for (const Token* token = start; token <= end; token++)
 	{
 		switch (token->tokenType)
 		{
+		case TokenType::OPEN_PAREN:
+			const Token* closingParen = findClosingParen(token);
+			expr.a = createPtr<Expression>
+				(std::forward<Expression>(parseExpr(token + 1, closingParen - 1)));
+			break;
+		case TokenType::CLOSE_PAREN:
+			exitWithError(ErrorCode::UNEXPECTED_CHARACTER, _args->inputFile, token->row, token->col);
+			break;
 		case TokenType::LITERAL:
 			break;
 		case TokenType::VARIABLE:
-			break;
-		case TokenType::OPEN_PAREN:
-			break;
-		case TokenType::CLOSE_PAREN:
 			break;
 		case TokenType::PLUS:
 			break;
@@ -114,7 +145,7 @@ Statement Parser::parseAssign(const Token* start, const Token* end)
 	// *start is definitely a variable token
 	const Token* token = start + 1;
 
-	if (token >= end || token->tokenType != TokenType::ASSIGN)
+	if (token >= end || token->tokenType != TokenType::EQUALS)
 	{
 		HE_DEBUG_BREAK;
 		exitWithError(ErrorCode::EXPECTED_EQUALS, _args->inputFile, token->row, token->col);

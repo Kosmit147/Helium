@@ -12,6 +12,7 @@ struct Expression
 	enum class Type : u8
 	{
 		ERR_TYPE,
+		EMPTY,
 		VALUE,
 		VARIABLE,
 		ADD,

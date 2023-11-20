@@ -52,6 +52,9 @@ void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName,
 	case ErrorCode::EXPECTED_AN_EXPRESSION:
 		errorMsg = fileInfStr + ' ' + "Expected an expression.";
 		break;
+	case ErrorCode::EXPECTED_A_CLOSING_PAREN:
+		errorMsg = fileInfStr + ' ' + "Expected a ')'";
+		break;
 	case ErrorCode::SYNTAX_ERROR:
 		errorMsg = fileInfStr + ' ' + "Syntax error.";
 		break;

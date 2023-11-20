@@ -18,16 +18,16 @@ struct Literal
 	const HeType type;
 
 	union {
-		i32 value;
+		i32 valI32;
 	};
 
 	template<typename T>
-	inline Literal(HeType type, T newVal) : type(type)
+	inline Literal(HeType type, T value) : type(type)
 	{
 		switch (type)
 		{
 		case HeType::I32:
-			value = newVal;
+			valI32 = value;
 			break;
 		default:
 			HE_DEBUG_BREAK;
@@ -37,9 +37,18 @@ struct Literal
 	}
 
 	template<typename T>
-	inline T getValue() const
+	inline T getValue(HeType type) const
 	{
-		return (T)value;
+		switch (type)
+		{
+		case HeType::I32:
+			return (T)valI32;
+			break;
+		default:
+			HE_DEBUG_BREAK;
+			return (T)0;
+			break;
+		}
 	}
 };
 
@@ -67,7 +76,7 @@ struct Token
 		MINUS,
 		ASTERISK,
 		FORWARD_SLASH,
-		ASSIGN,
+		EQUALS,
 		// when adding new tokens, update tokenTypeMap and tokenNameMap definitions
 	};
 
