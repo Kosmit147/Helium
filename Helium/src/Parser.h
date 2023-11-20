@@ -5,7 +5,9 @@
 
 #include <vector>
 
+#include "TokensData.h"
 #include "Tokenizer.h"
+#include "Arena.h"
 
 struct Expression
 {
@@ -13,7 +15,7 @@ struct Expression
 	{
 		ERR_TYPE,
 		EMPTY,
-		VALUE,
+		LITERAL,
 		VARIABLE,
 		ADD,
 		SUB,
@@ -23,10 +25,10 @@ struct Expression
 	};
 
 	Type type = Type::ERR_TYPE;
-	Ref<Literal> value = nullptr;
-	Ref<Variable> variable = nullptr;
-	Ptr<Expression> a = nullptr;
-	Ptr<Expression> b = nullptr;
+	Literal* literal = nullptr;
+	Variable* variable = nullptr;
+	Expression* a = nullptr;
+	Expression* b = nullptr;
 };
 
 struct Statement
@@ -39,15 +41,15 @@ struct Statement
 	};
 
 	Type type = Type::EMPTY;
-	Ptr<Expression> a = nullptr;
-	Ptr<Expression> b = nullptr;
+	Expression* a = nullptr;
+	Expression* b = nullptr;
 };
 
 class Parser
 {
 public:
 	[[nodiscard]] static std::vector<Statement> parseTokens(const Args& setArgs, 
-		const std::vector<Token>& tokens);
+		const TokensData& tokensData);
 	[[nodiscard]] static Statement parseStatement(const Token* start, const Token* end);
 	[[nodiscard]] static Expression parseExpr(const Token* start, const Token* end);
 	[[nodiscard]] static Statement parseExit(const Token* start, const Token* end);
@@ -55,4 +57,7 @@ public:
 
 private:
 	static const Args* _args;
+	static Ref<Arena<Literal>> _literals;
+	static Ref<Arena<Variable>> _variables;
+	static Ref<Arena<Expression>> _expressions;
 };

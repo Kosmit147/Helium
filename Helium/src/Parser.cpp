@@ -9,20 +9,28 @@ using ExprType = Expression::Type;
 using StatementType = Statement::Type;
 
 const Args* Parser::_args = nullptr;
+Ref<Arena<Literal>> Parser::_literals = nullptr;
+Ref<Arena<Variable>> Parser::_variables = nullptr;
+Ref<Arena<Expression>> Parser::_expressions = nullptr;
 
-std::vector<Statement> Parser::parseTokens(const Args& args, const std::vector<Token>& tokens)
+std::vector<Statement> Parser::parseTokens(const Args& args, const TokensData& tokensData)
 {
 	_args = &args;
+	_literals = tokensData.literals;
+	_variables = tokensData.variables;
+	_expressions = createRef<Arena<Expression>>(10000);
 
 	std::vector<Statement> statements;
 	statements.reserve(Tokenizer::semicolonCount());
+
+	const std::vector<Token>& tokens = tokensData.tokens;
 	const Token* stmtStartToken = &tokens[0];
 
 	for (const Token& token : tokens)
 	{
 		if (token.tokenType == TokenType::SEMICOLON)
 		{
-			statements.emplace_back(std::forward<Statement>(parseStatement(stmtStartToken, &token)));
+			statements.push_back(parseStatement(stmtStartToken, &token));
 			stmtStartToken = (&token) + 1;
 		}
 	}
@@ -85,18 +93,20 @@ Expression Parser::parseExpr(const Token* start, const Token* end)
 				return i;
 
 		exitWithError(ErrorCode::EXPECTED_A_CLOSING_PAREN, _args->inputFile, openParen->row, openParen->col);
+		return (const Token*)nullptr;
 	};
 
 	Expression expr;
 
 	for (const Token* token = start; token <= end; token++)
 	{
+		const Token* closingParen;
+
 		switch (token->tokenType)
 		{
 		case TokenType::OPEN_PAREN:
-			const Token* closingParen = findClosingParen(token);
-			expr.a = createPtr<Expression>
-				(std::forward<Expression>(parseExpr(token + 1, closingParen - 1)));
+			closingParen = findClosingParen(token);
+			expr.a = &_expressions->pushBack(parseExpr(token + 1, closingParen - 1));
 			break;
 		case TokenType::CLOSE_PAREN:
 			exitWithError(ErrorCode::UNEXPECTED_CHARACTER, _args->inputFile, token->row, token->col);
@@ -133,7 +143,7 @@ Statement Parser::parseExit(const Token* start, const Token* end)
 	}
 
 	statement.type = StatementType::EXIT;
-	statement.a = createPtr<Expression>(std::forward<Expression>(parseExpr(token, end)));
+	statement.a = &_expressions->pushBack(parseExpr(token, end));
 
 	return statement;
 }
@@ -156,10 +166,8 @@ Statement Parser::parseAssign(const Token* start, const Token* end)
 	// b - the expression
 
 	statement.type = StatementType::ASSIGN;
-	statement.a = createPtr<Expression>();
-	statement.a->type = ExprType::VARIABLE;
-	statement.a->variable = start->variable;
-	statement.b = createPtr<Expression>(std::forward<Expression>(parseExpr(token + 1, end)));
+	statement.a = &_expressions->pushBack({ .type = ExprType::VARIABLE , .variable = start->variable });
+	statement.b = &_expressions->pushBack(parseExpr(token + 1, end));
 
 	return statement;
 }

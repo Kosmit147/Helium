@@ -13,19 +13,6 @@
 
 using TokenType = Token::TokenType;
 
-const std::unordered_map<std::string, TokenType> Token::tokenTypeMap =
-{
-	{ "exit", TokenType::EXIT },
-	{ ";", TokenType::SEMICOLON },
-	{ "(", TokenType::OPEN_PAREN },
-	{ ")", TokenType::CLOSE_PAREN },
-	{ "=", TokenType::EQUALS },
-	{ "+", TokenType::PLUS },
-	{ "-", TokenType::MINUS },
-	{ "*", TokenType::ASTERISK },
-	{ "/", TokenType::FORWARD_SLASH },
-};
-
 std::string_view Tokenizer::_input;
 usize Tokenizer::_row = 0;
 usize Tokenizer::_col = 0;
@@ -34,20 +21,20 @@ it Tokenizer::_index = 0;
 const Args* Tokenizer::_args = nullptr;
 usize Tokenizer::_semicolonCount = 0;
 
-const Token Token::errorToken = { TokenType::ERR, 0, 0 };
+Ref<Arena<Literal>> Tokenizer::_literals = nullptr;
+Ref<Arena<Variable>> Tokenizer::_variables = nullptr;
 
-Variable::Variable(HeType type, std::string_view name)
-	: type(type), name(name) {}
-
-Variable::Variable(HeType type, std::string&& name)
-	: type(type), name(std::move(name)) {}
-
-std::vector<Token> Tokenizer::tokenize(const Args& args, std::string_view input)
+TokensData Tokenizer::tokenize(const Args& args, std::string_view input)
 {
 	_args = &args;
 	_input = input;
 
-	std::vector<Token> tokens;
+	TokensData tokensData;
+	std::vector<Token>& tokens = tokensData.tokens;
+	tokensData.literals = createRef<Arena<Literal>>(1000);
+	tokensData.variables = createRef<Arena<Variable>>(1000);
+	_literals = tokensData.literals;
+	_variables = tokensData.variables;
 
 	for (; _index < _input.length(); _index++)
 	{
@@ -67,21 +54,21 @@ std::vector<Token> Tokenizer::tokenize(const Args& args, std::string_view input)
 		else if (type == CharacterType::ALPHABETIC)
 		{
 			// we are reading either a keyword or a variable name
-			tokens.emplace_back(std::forward<Token>(readKeywordOrVar()));
+			tokens.push_back(readKeywordOrVar());
 		}
 		else if (type == CharacterType::DIGIT)
 		{
 			// int literal
-			tokens.emplace_back(std::forward<Token>(readI32Literal()));
+			tokens.push_back(readI32Literal());
 		}
 		else if (type == CharacterType::SPECIAL_CHAR)
 		{
 			// special character
-			tokens.emplace_back(std::forward<Token>(readSpecialChar()));
+			tokens.push_back(readSpecialChar());
 		}
 	}
 
-	return tokens;
+	return tokensData;
 }
 
 Token Tokenizer::readKeywordOrVar()
@@ -110,7 +97,7 @@ Token Tokenizer::readKeywordOrVar()
 			else
 			{
 				Token token(TokenType::VARIABLE, _row, tokenStartCol);
-				token.variable = createRef<Variable>(HeType::I32, std::move(tokenStr));
+				token.variable = &_variables->emplaceBack(HeType::I32, std::move(tokenStr));
 				return token;
 			}
 		}
@@ -151,7 +138,7 @@ Token Tokenizer::readI32Literal()
 			}
 
 			Token token(TokenType::LITERAL, _row, tokenStartCol);
-			token.literal = createRef<Literal>(HeType::I32, value);
+			token.literal = &_literals->emplaceBack(HeType::I32, value);
 			return token;
 		}
 	}
@@ -182,48 +169,3 @@ Token Tokenizer::readSpecialChar()
 	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _args->inputFile, _row, _col);
 	return Token::errorToken;
 }
-
-Token::Token(TokenType tokenType, usize row, usize col)
-	: tokenType(tokenType), row(row), col(col), literal(nullptr), variable(nullptr) {}
-
-Token::Token(const Token& other)
-	: tokenType(other.tokenType), row(other.row), col(other.col)
-{
-	if (other.literal)
-		literal = createRef<Literal>(other.literal->type, other.literal->value);
-
-	if (other.variable)
-		variable = createRef<Variable>(other.variable->type, other.variable->name);
-}
-
-#ifdef _DEBUG
-
-#include <iostream>
-
-const std::unordered_map<TokenType, std::string> Token::tokenNameMap = {
-	{ TokenType::ERR, ERR_STR },
-	{ TokenType::EXIT, "exit" },
-	{ TokenType::LITERAL, "literal" },
-	{ TokenType::VARIABLE, "variable" },
-	{ TokenType::SEMICOLON, "semicolon" },
-	{ TokenType::OPEN_PAREN, "openingParenthesis" },
-	{ TokenType::CLOSE_PAREN, "closingParenthesis" },
-	{ TokenType::EQUALS, "assignment" },
-	{ TokenType::PLUS, "plus" },
-	{ TokenType::MINUS, "minus" },
-	{ TokenType::ASTERISK, "asterisk" },
-	{ TokenType::FORWARD_SLASH, "forwardSlash" },
-};
-
-const char* Token::getTokenStr(TokenType type)
-{
-	auto search = tokenNameMap.find(type);
-
-	if (search != tokenNameMap.end())
-		return search->second.c_str();
-
-	HE_DEBUG_BREAK;
-	return ERR_STR;
-}
-
-#endif

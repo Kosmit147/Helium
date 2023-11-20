@@ -29,7 +29,7 @@ inline std::ostream& operator<<(std::ostream& stream, const Literal& literal)
 	switch (literal.type)
 	{
 	case HeType::I32:
-		stream << literal.getValue<i32>();
+		stream << literal.getValue<i32>(HeType::I32);
 		break;
 	default:
 		HE_DEBUG_BREAK;

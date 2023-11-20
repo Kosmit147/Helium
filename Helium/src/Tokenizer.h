@@ -3,109 +3,18 @@
 
 #pragma once
 
-#include <vector>
 #include <string_view>
-#include <unordered_map>
-#include <variant>
 
+#include "Token.h"
+#include "TokensData.h"
 #include "common.h"
-#include "HeType.h"
 #include "Args.h"
-#include "error.h"
-
-struct Literal
-{
-	const HeType type;
-
-	union {
-		i32 valI32;
-	};
-
-	template<typename T>
-	inline Literal(HeType type, T value) : type(type)
-	{
-		switch (type)
-		{
-		case HeType::I32:
-			valI32 = value;
-			break;
-		default:
-			HE_DEBUG_BREAK;
-			exitWithError(ErrorCode::INCORRECT_LITERAL_TYPE);
-			break;
-		}
-	}
-
-	template<typename T>
-	inline T getValue(HeType type) const
-	{
-		switch (type)
-		{
-		case HeType::I32:
-			return (T)valI32;
-			break;
-		default:
-			HE_DEBUG_BREAK;
-			return (T)0;
-			break;
-		}
-	}
-};
-
-struct Variable
-{
-	const HeType type;
-	const std::string name;
-
-	Variable(HeType type, std::string_view name);
-	Variable(HeType type, std::string&& name);
-};
-
-struct Token
-{
-	enum class TokenType : u8
-	{
-		ERR,
-		EXIT,
-		LITERAL,
-		VARIABLE,
-		SEMICOLON,
-		OPEN_PAREN,
-		CLOSE_PAREN,
-		PLUS,
-		MINUS,
-		ASTERISK,
-		FORWARD_SLASH,
-		EQUALS,
-		// when adding new tokens, update tokenTypeMap and tokenNameMap definitions
-	};
-
-	static const std::unordered_map<std::string, TokenType> tokenTypeMap;
-
-	const TokenType tokenType;
-	const usize row;
-	const usize col;
-	Ref<Literal> literal;
-	Ref<Variable> variable;
-
-	Token(TokenType tokenType, usize row, usize col);
-	Token(const Token& other);
-
-	static const Token errorToken;
-
-#ifdef _DEBUG
-	static const std::unordered_map<TokenType, std::string> tokenNameMap;
-	[[nodiscard]] static const char* getTokenStr(TokenType type);
-#endif
-
-private:
-	Token& operator=(const Token& other) = delete;
-};
+#include "Arena.h"
 
 class Tokenizer
 {
 public:
-	[[nodiscard]] static std::vector<Token> tokenize(const Args& args, std::string_view input);
+	[[nodiscard]] static TokensData tokenize(const Args& args, std::string_view input);
 	[[nodiscard]] inline static usize semicolonCount() { return _semicolonCount; }
 	
 private:
@@ -116,6 +25,9 @@ private:
 	static it _index;
 	static const Args* _args;
 	static usize _semicolonCount;
+
+	static Ref<Arena<Literal>> _literals;
+	static Ref<Arena<Variable>> _variables;
 
 private:
 	[[nodiscard]] static Token readKeywordOrVar();

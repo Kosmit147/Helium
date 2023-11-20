@@ -9,18 +9,20 @@
 #include "Compiler.h"
 #include "file.h"
 #include "log.h"
+#include "Arena.h"
 
 int main(int argc, char* argv[])
 {
 	Args args = parseArgs(argc, argv);
 
 	std::stringstream heCode = readFile(args.inputFile);
-	std::vector<Token> tokens = Tokenizer::tokenize(args, heCode.view());
+	TokensData tokensData = Tokenizer::tokenize(args, heCode.view());
 
 #ifdef _DEBUG
-	printTokens(tokens);
+	printTokens(tokensData.tokens);
 	std::cout << std::endl;
 	printCode(heCode.view());
+	// printSyntaxTree(...);
 #endif
 
 	Compiler::compileIntoFile(args, args.outputFile);
