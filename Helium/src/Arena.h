@@ -9,6 +9,7 @@
 #include "common.h"
 
 // for now this is just to allow a ForEach loop
+// TODO: implement fully
 template <typename ArenaType>
 class ArenaIterator
 {
@@ -60,8 +61,6 @@ template <typename T>
 class Arena
 {
 public:
-	friend Arena;
-
 	using ValueType = T;
 	using Iterator = ArenaIterator<Arena<T>>;
 
