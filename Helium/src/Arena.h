@@ -37,7 +37,7 @@ public:
 
 	inline ArenaIterator& operator++(int)
 	{
-		ArenaIterator iterator = *this;
+		ArenaIterator& iterator = *this;
 		++(*this);
 		return iterator;
 	}
@@ -68,8 +68,9 @@ public:
 	explicit inline Arena(usize allocStrat = 100) : _allocStrat(allocStrat)
 	{
 		allocBlocks(1);
-		_front = addrAt(0);
-		_back = addrAt(0);
+		T* blockAddr = addrAt(0);
+		_front = blockAddr;
+		_back = blockAddr;
 	}
 
 	inline ~Arena()

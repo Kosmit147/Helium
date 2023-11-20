@@ -54,17 +54,17 @@ TokensData Tokenizer::tokenize(const Args& args, std::string_view input)
 		else if (type == CharacterType::ALPHABETIC)
 		{
 			// we are reading either a keyword or a variable name
-			tokens.push_back(readKeywordOrVar());
+			tokens.emplace_back(readKeywordOrVar());
 		}
 		else if (type == CharacterType::DIGIT)
 		{
 			// int literal
-			tokens.push_back(readI32Literal());
+			tokens.emplace_back(readI32Literal());
 		}
 		else if (type == CharacterType::SPECIAL_CHAR)
 		{
 			// special character
-			tokens.push_back(readSpecialChar());
+			tokens.emplace_back(readSpecialChar());
 		}
 	}
 

@@ -33,9 +33,9 @@ struct Literal
 	}
 
 	template<typename T>
-	inline T getValue(HeType type) const
+	inline T getValue(HeType valueType) const
 	{
-		switch (type)
+		switch (valueType)
 		{
 		case HeType::I32:
 			return (T)valI32;

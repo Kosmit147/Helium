@@ -30,7 +30,7 @@ std::vector<Statement> Parser::parseTokens(const Args& args, const TokensData& t
 	{
 		if (token.tokenType == TokenType::SEMICOLON)
 		{
-			statements.push_back(parseStatement(stmtStartToken, &token));
+			statements.emplace_back(parseStatement(stmtStartToken, &token));
 			stmtStartToken = (&token) + 1;
 		}
 	}
