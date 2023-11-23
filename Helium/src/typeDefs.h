@@ -25,6 +25,8 @@ using f64 = double;
 using usize = std::size_t;
 using it = usize;
 
+using byte = u8;
+
 template<typename T>
 using Ptr = std::unique_ptr<T>;
 template<typename T, typename ... Args>
