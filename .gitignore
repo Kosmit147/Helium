@@ -6,6 +6,9 @@
 # Working directory for debugging purposes
 /wd
 
+# Debugging utils
+/utils/*.pdf
+
 # User-specific files
 *.rsuser
 *.suo
