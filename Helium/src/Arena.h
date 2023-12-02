@@ -3,13 +3,10 @@
 
 #pragma once
 
-#include <stdlib.h>
 #include <vector>
 
 #include "common.h"
 
-// for now this is just to allow a ForEach loop
-// TODO: implement fully
 template <typename ArenaType>
 class ArenaIterator
 {
@@ -116,7 +113,7 @@ public:
 			allocBlocks(1);
 
 		T* addr = addrAt(_objectCount);
-		*addr = elem;
+		new(addr) T(elem);
 		_capacityLeft--;
 		_objectCount++;
 		_back = addr;
@@ -129,7 +126,7 @@ public:
 			allocBlocks(1);
 
 		T* addr = addrAt(_objectCount);
-		*addr = std::move(elem);
+		new(addr) T(std::move(elem));
 		_capacityLeft--;
 		_objectCount++;
 		_back = addr;
