@@ -28,13 +28,13 @@ GrammarTree::GrammarTree()
 
 		// EXIT BRANCH - index 1
 		Node{ NodeType::TOKEN, TokenType::EXIT },
-		Node{ NodeType::EXPR, TokenType::NONE },
+		Node{ NodeType::EXPRA, TokenType::NONE },
 		Node{ NodeType::TOKEN, TokenType::SEMICOLON },
 
 		// ASSIGN BRANCH - index 4
 		Node{ NodeType::TOKEN, TokenType::VARIABLE },
 		Node{ NodeType::TOKEN, TokenType::EQUALS },
-		Node{ NodeType::EXPR, TokenType::NONE },
+		Node{ NodeType::EXPRA, TokenType::NONE },
 		Node{ NodeType::TOKEN, TokenType::SEMICOLON } 
 	};
 

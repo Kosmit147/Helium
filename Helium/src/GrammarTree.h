@@ -17,7 +17,8 @@ struct GrammarTree
 	{
 		enum class Type {
 			TOKEN,
-			EXPR,
+			EXPRA,
+			EXPRB,
 		};
 
 		Type type;

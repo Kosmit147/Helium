@@ -77,7 +77,9 @@ bool Parser::traverseNodes(Statement& stmt, const GrammarTree::Node* node, Token
 
 	TokenView remainingTokensView = view;
 
-	if (node->type == Node::Type::EXPR)
+	Node::Type nodeType = node->type;
+
+	if (nodeType == Node::Type::EXPRA || nodeType == Node::Type::EXPRB)
 	{
 		auto exprData = parseExpr(view);
 
@@ -85,7 +87,12 @@ bool Parser::traverseNodes(Statement& stmt, const GrammarTree::Node* node, Token
 		{
 			Expression& expr = exprData->expr;
 			const Token* exprEnd = exprData->exprSpan.last;
-			stmt.a = &global::expressions.pushBack(std::move(expr));
+
+			if (nodeType == Node::Type::EXPRA)
+				stmt.a = &global::expressions.pushBack(std::move(expr));
+			else if (nodeType == Node::Type::EXPRA)
+				stmt.b = &global::expressions.pushBack(std::move(expr));
+			
 			remainingTokensView.first = exprEnd;
 		}
 		else
@@ -93,7 +100,7 @@ bool Parser::traverseNodes(Statement& stmt, const GrammarTree::Node* node, Token
 			return false;
 		}
 	}
-	else if (node->type == Node::Type::TOKEN)
+	else if (nodeType == Node::Type::TOKEN)
 	{
 		if (node->tokenType != remainingTokensView.first->tokenType)
 			return false;
