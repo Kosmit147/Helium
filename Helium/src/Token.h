@@ -63,8 +63,11 @@ struct Token
 	FilePosition filePos;
 
 	// TODO: make this into a union
-	Literal* literal;
-	Variable* variable;
+
+	union {
+		Literal* literal;
+		Variable* variable;
+	};
 
 	Token(TokenType tokenType, FilePosition filePos );
 

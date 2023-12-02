@@ -59,16 +59,16 @@ inline std::ostream& operator<<(std::ostream& stream, const Token& token)
 
 	indentLevel++;
 
-	if (token.literal)
+	switch (token.tokenType)
 	{
+	case Token::TokenType::LITERAL:
 		stream << std::endl;
 		stream << *token.literal;
-	}
-
-	if (token.variable)
-	{
+		break;
+	case Token::TokenType::VARIABLE:
 		stream << std::endl;
 		stream << *token.variable;
+		break;
 	}
 
 	indentLevel--;
