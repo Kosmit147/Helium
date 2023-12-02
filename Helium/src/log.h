@@ -55,7 +55,7 @@ inline std::ostream& operator<<(std::ostream& stream, const Token& token)
 	indent(stream);
 
 	stream << "{ tokenType: " << Token::getTokenTypeStr(token.tokenType) << ", "
-		<< token.row << ":" << token.col << " }";
+		<< token.filePos.row << ":" << token.filePos.col << " }";
 
 	indentLevel++;
 

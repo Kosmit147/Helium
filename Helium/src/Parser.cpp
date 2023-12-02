@@ -34,7 +34,7 @@ std::vector<Statement> Parser::parseTokens(const std::vector<Token>& tokens)
 	const Token& lastToken = tokens.back();
 
 	if (lastToken.tokenType != TokenType::SEMICOLON /* TODO: or closing brace */)
-		exitWithError(ErrorCode::EXPECTED_A_SEMICOLON, lastToken.col, lastToken.row);
+		exitWithError(ErrorCode::EXPECTED_A_SEMICOLON, lastToken.filePos);
 
 	return statements;
 }
@@ -51,7 +51,7 @@ Statement Parser::parseStatement(TokenView view)
 
 	const Token& stmtStart = *view.first;
 
-	exitWithError(ErrorCode::FAILED_TO_PARSE_STATEMENT, stmtStart.row, stmtStart.col);
+	exitWithError(ErrorCode::FAILED_TO_PARSE_STATEMENT, stmtStart.filePos);
 	return { StatementType::EMPTY };
 }
 
@@ -63,7 +63,7 @@ std::optional<Statement> Parser::matchBranch(GrammarTree::Branch branch,
 	if (traverseNodes(stmt, branch.startingNode, view))
 	{
 		stmt.type = branch.statementType;
-		stmt.row = view.first->row;
+		stmt.row = view.first->filePos.row;
 		return stmt;
 	}
 
@@ -193,7 +193,7 @@ std::optional<ExprData> Parser::parseExpr(TokenView view)
 		while (tokenStack.top()->tokenType != TokenType::OPEN_PAREN)
 		{
 			if (tokenStack.empty())
-				exitWithError(ErrorCode::UNEXPECTED_CHARACTER, closingParen.row, closingParen.col);
+				exitWithError(ErrorCode::UNEXPECTED_CHARACTER, closingParen.filePos);
 
 			rpnVec.push_back(*tokenStack.top());
 			tokenStack.pop();

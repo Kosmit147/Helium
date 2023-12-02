@@ -33,6 +33,11 @@ struct Variable
 
 struct Token
 {
+	struct FilePosition {
+		usize row;
+		usize col;
+	};
+
 	enum class TokenType : u8
 	{
 		NONE,
@@ -55,14 +60,13 @@ struct Token
 	static const Token errorToken;
 
 	TokenType tokenType;
-	usize row;
-	usize col;
+	FilePosition filePos;
 
 	// TODO: make this into a union
 	Literal* literal;
 	Variable* variable;
 
-	Token(TokenType tokenType, usize row, usize col);
+	Token(TokenType tokenType, FilePosition filePos );
 
 #ifdef _DEBUG
 	static const std::unordered_map<TokenType, std::string> tokenNameMap;

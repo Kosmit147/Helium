@@ -5,7 +5,7 @@
 
 using TokenType = Token::TokenType;
 
-const Token Token::errorToken = { TokenType::ERR, 0, 0 };
+const Token Token::errorToken = { TokenType::ERR, Token::FilePosition{ .row = 0, .col = 0 } };
 
 const std::unordered_map<std::string, TokenType> Token::tokenTypeMap =
 {
@@ -26,8 +26,8 @@ Variable::Variable(HeType type, std::string_view name)
 Variable::Variable(HeType type, std::string&& name)
 	: type(type), name(std::move(name)) {}
 
-Token::Token(TokenType tokenType, usize row, usize col)
-	: tokenType(tokenType), row(row), col(col), literal(nullptr), variable(nullptr) {}
+Token::Token(TokenType tokenType, FilePosition filePos)
+	: tokenType(tokenType), filePos(filePos), literal(nullptr), variable(nullptr) {}
 
 #ifdef _DEBUG
 

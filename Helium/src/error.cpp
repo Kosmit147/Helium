@@ -8,7 +8,7 @@
 
 #include "global.h"
 
-void exitWithError(ErrorCode errorCodeEnum, usize row, usize col)
+void exitWithError(ErrorCode errorCodeEnum, Token::FilePosition filePos)
 {
 	std::string errorMsg;
 	std::string fileInfStr;
@@ -16,7 +16,7 @@ void exitWithError(ErrorCode errorCodeEnum, usize row, usize col)
 	if (!global::args.inputFile.empty())
 	{
 		fileInfStr = (std::string)global::args.inputFile + ':'
-			+ std::to_string(row) + ':' + std::to_string(col);
+			+ std::to_string(filePos.row) + ':' + std::to_string(filePos.col);
 	}
 
 	switch (errorCodeEnum)

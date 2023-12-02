@@ -82,11 +82,11 @@ Token Tokenizer::readKeywordOrVar()
 			auto search = Token::tokenTypeMap.find(tokenStr);
 			if (search != Token::tokenTypeMap.end())
 			{
-				return { search->second, _row, tokenStartCol };
+				return { search->second, { _row, tokenStartCol } };
 			}
 			else
 			{
-				Token token(TokenType::VARIABLE, _row, tokenStartCol);
+				Token token(TokenType::VARIABLE, { _row, tokenStartCol });
 				token.variable = &global::variables.emplaceBack(HeType::I32, std::move(tokenStr));
 				return token;
 			}
@@ -94,7 +94,7 @@ Token Tokenizer::readKeywordOrVar()
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _row, tokenStartCol);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, { _row, tokenStartCol });
 	return Token::errorToken;
 }
 
@@ -124,17 +124,17 @@ Token Tokenizer::readI32Literal()
 			}
 			catch (std::out_of_range&)
 			{
-				exitWithError(ErrorCode::I32_LITERAL_OUT_OF_RANGE, _row, tokenStartCol);
+				exitWithError(ErrorCode::I32_LITERAL_OUT_OF_RANGE, { _row, tokenStartCol });
 			}
 
-			Token token(TokenType::LITERAL, _row, tokenStartCol);
+			Token token(TokenType::LITERAL, { _row, tokenStartCol });
 			token.literal = &global::literals.emplaceBack(value);
 			return token;
 		}
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _row, tokenStartCol);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, { _row, tokenStartCol });
 	return Token::errorToken;
 }
 
@@ -148,14 +148,14 @@ Token Tokenizer::readSpecialChar()
 	{
 		if (search->second == TokenType::SEMICOLON)
 			_semicolonCount++;
-		return { search->second, _row, _inputIndex - _colOffset };
+		return { search->second, { _row, _inputIndex - _colOffset } };
 	}
 	else
 	{
-		exitWithError(ErrorCode::UNEXPECTED_CHARACTER, _row, _col);
+		exitWithError(ErrorCode::UNEXPECTED_CHARACTER, { _row, _col });
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _row, _col);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, { _row, _col });
 	return Token::errorToken;
 }

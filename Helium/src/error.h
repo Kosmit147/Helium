@@ -4,6 +4,7 @@
 #pragma once
 
 #include "common.h"
+#include "Token.h"
 
 enum class ErrorCode
 {
@@ -23,4 +24,4 @@ enum class ErrorCode
 	SYNTAX_ERROR,
 };
 
-void exitWithError(ErrorCode errorCodeEnum, usize row = 0, usize col = 0);
+void exitWithError(ErrorCode errorCodeEnum, Token::FilePosition filePos = { 0, 0 });
