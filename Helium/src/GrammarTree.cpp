@@ -24,18 +24,18 @@ GrammarTree::GrammarTree()
 
 	_nodes = {
 		// EMPTY BRANCH - index 0
-		Node{ NodeType::TOKEN, TokenType::SEMICOLON },
+		Node{ NodeType::TOKEN, TokenType::SEMICOLON },	// 0
 
 		// EXIT BRANCH - index 1
-		Node{ NodeType::TOKEN, TokenType::EXIT },
-		Node{ NodeType::EXPRA, TokenType::NONE },
-		Node{ NodeType::TOKEN, TokenType::SEMICOLON },
+		Node{ NodeType::TOKEN, TokenType::EXIT },		// 1
+		Node{ NodeType::EXPRA, TokenType::NONE },		// 2
+		Node{ NodeType::TOKEN, TokenType::SEMICOLON },	// 3
 
 		// ASSIGN BRANCH - index 4
-		Node{ NodeType::TOKEN, TokenType::VARIABLE },
-		Node{ NodeType::TOKEN, TokenType::EQUALS },
-		Node{ NodeType::EXPRA, TokenType::NONE },
-		Node{ NodeType::TOKEN, TokenType::SEMICOLON } 
+		Node{ NodeType::TOKEN, TokenType::VARIABLE },	// 4
+		Node{ NodeType::TOKEN, TokenType::EQUALS },		// 5
+		Node{ NodeType::EXPRA, TokenType::NONE },		// 6
+		Node{ NodeType::TOKEN, TokenType::SEMICOLON }	// 7
 	};
 
 	branches = {
