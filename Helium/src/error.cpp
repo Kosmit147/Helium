@@ -6,17 +6,16 @@
 #include <string>
 #include <iostream>
 
-#include "common.h"
+#include "global.h"
 
-void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName,
-	usize row, usize col)
+void exitWithError(ErrorCode errorCodeEnum, usize row, usize col)
 {
 	std::string errorMsg;
 	std::string fileInfStr;
 
-	if (!fileName.empty())
+	if (!global::args.inputFile.empty())
 	{
-		fileInfStr = (std::string)fileName + ':'
+		fileInfStr = (std::string)global::args.inputFile + ':'
 			+ std::to_string(row) + ':' + std::to_string(col);
 	}
 
@@ -40,6 +39,9 @@ void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName,
 	case ErrorCode::FAILED_TO_TOKENIZE:
 		errorMsg = fileInfStr + ' ' + "Failed to tokenize.";
 		break;
+	case ErrorCode::FAILED_TO_PARSE_STATEMENT:
+		errorMsg = fileInfStr + ' ' + "Failed to parse statement.";
+		break;
 	case ErrorCode::INVALID_TOKEN:
 		errorMsg = fileInfStr + ' ' + "Parser encountered an invalid token.";
 		break;
@@ -57,9 +59,6 @@ void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName,
 		break;
 	case ErrorCode::SYNTAX_ERROR:
 		errorMsg = fileInfStr + ' ' + "Syntax error.";
-		break;
-	case ErrorCode::INCORRECT_LITERAL_TYPE:
-		errorMsg = "Incorrect literal type.";
 		break;
 	default:
 		errorMsg = ERR_STR;

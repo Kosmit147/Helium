@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "common.h"
-
 enum class CharacterType
 {
 	WHITESPACE,

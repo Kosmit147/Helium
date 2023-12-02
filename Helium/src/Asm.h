@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "file.h"
+#include "SegmentsData.h"
 
 #define TAB '\t'
 #define NL '\n'

@@ -3,26 +3,24 @@
 
 #pragma once
 
-#include <string>
-
 #include "common.h"
 
 enum class ErrorCode
 {
+	NO_ERROR = 0,
 	INCORRECT_USAGE = 1,
 	FAILED_TO_READ_FROM_INPUT_FILE,
 	FAILED_TO_WRITE_TO_OUTPUT_FILE,
 	I32_LITERAL_OUT_OF_RANGE,
 	UNEXPECTED_CHARACTER,
 	FAILED_TO_TOKENIZE,
+	FAILED_TO_PARSE_STATEMENT,
 	INVALID_TOKEN,
 	EXPECTED_A_SEMICOLON,
 	EXPECTED_EQUALS,
 	EXPECTED_AN_EXPRESSION,
 	EXPECTED_A_CLOSING_PAREN,
 	SYNTAX_ERROR,
-	INCORRECT_LITERAL_TYPE,
 };
 
-void exitWithError(ErrorCode errorCodeEnum, std::string_view fileName = "", 
-	usize row = 0, usize col = 0);
+void exitWithError(ErrorCode errorCodeEnum, usize row = 0, usize col = 0);

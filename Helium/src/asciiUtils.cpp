@@ -7,7 +7,7 @@
 {
 	static constexpr char whiteSpaceChars[] = {
 		' ', '\f', '\n',
-		'\r', '\t', '\v'
+		'\r', '\t', '\v',
 	};
 
 	for (char whiteSpaceChar : whiteSpaceChars)

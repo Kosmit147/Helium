@@ -3,7 +3,7 @@
 
 #include "Asm.h"
 
-SegmentsData Asm::_segmentsData{};
+SegmentsData Asm::_segmentsData;
 std::stringstream& Asm::_bss = Asm::_segmentsData.bss;
 std::stringstream& Asm::_data = Asm::_segmentsData.data;
 std::stringstream& Asm::_text = Asm::_segmentsData.text;
