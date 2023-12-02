@@ -1,11 +1,10 @@
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-#include "args.h"
+#include "Args.h"
 
-#include <string>
-
-#include "log.h"
+#include "common.h"
+#include "help.h"
 #include "error.h"
 
 Args parseArgs(int argc, char* argv[])

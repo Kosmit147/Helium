@@ -29,38 +29,21 @@ Variable::Variable(HeType type, std::string&& name)
 Token::Token(TokenType tokenType, usize row, usize col)
 	: tokenType(tokenType), row(row), col(col), literal(nullptr), variable(nullptr) {}
 
-Token::Token(const Token& other)
-	: tokenType(other.tokenType), row(other.row), col(other.col), 
-	literal(other.literal), variable(other.variable) {}
-
 #ifdef _DEBUG
 
-#include <iostream>
-
 const std::unordered_map<TokenType, std::string> Token::tokenNameMap = {
-	{ TokenType::ERR, ERR_STR },
-	{ TokenType::EXIT, "exit" },
-	{ TokenType::LITERAL, "literal" },
-	{ TokenType::VARIABLE, "variable" },
-	{ TokenType::SEMICOLON, "semicolon" },
-	{ TokenType::OPEN_PAREN, "openingParenthesis" },
-	{ TokenType::CLOSE_PAREN, "closingParenthesis" },
-	{ TokenType::EQUALS, "assignment" },
-	{ TokenType::PLUS, "plus" },
-	{ TokenType::MINUS, "minus" },
-	{ TokenType::ASTERISK, "asterisk" },
+	{ TokenType::ERR,			ERR_STR },
+	{ TokenType::EXIT,			"exit" },
+	{ TokenType::LITERAL,		"literal" },
+	{ TokenType::VARIABLE,		"variable" },
+	{ TokenType::SEMICOLON,		"semicolon" },
+	{ TokenType::OPEN_PAREN,	"openingParenthesis" },
+	{ TokenType::CLOSE_PAREN,	"closingParenthesis" },
+	{ TokenType::EQUALS,		"assignment" },
+	{ TokenType::PLUS,			"plus" },
+	{ TokenType::MINUS,			"minus" },
+	{ TokenType::ASTERISK,		"asterisk" },
 	{ TokenType::FORWARD_SLASH, "forwardSlash" },
 };
-
-const char* Token::getTokenStr(TokenType type)
-{
-	auto search = tokenNameMap.find(type);
-
-	if (search != tokenNameMap.end())
-		return search->second.c_str();
-
-	HE_DEBUG_BREAK;
-	return ERR_STR;
-}
 
 #endif

@@ -2,28 +2,34 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 #include <iostream>
+#include <sstream>
+#include <string_view>
 
 #include "common.h"
-#include "Args.h"
+#include "global.h"
 #include "Tokenizer.h"
 #include "Compiler.h"
 #include "file.h"
 #include "log.h"
-#include "Arena.h"
+#include "Parser.h"
 
 int main(int argc, char* argv[])
 {
-	Args args = parseArgs(argc, argv);
+	global::args = parseArgs(argc, argv);
 
-	std::stringstream heCode = readFile(args.inputFile);
-	TokensData tokensData = Tokenizer::tokenize(args, heCode.view());
+	std::stringstream heCode = readFile(global::args.inputFile);
+	std::vector<Token> tokens = Tokenizer::tokenize(heCode.view());
+	std::vector<Statement> statements = Parser::parseTokens(tokens);
 
 #ifdef _DEBUG
-	printTokens(tokensData.tokens);
+	std::cout << std::endl;
+	printTokens(tokens);
 	std::cout << std::endl;
 	printCode(heCode.view());
-	// printSyntaxTree(...);
+	std::cout << std::endl;
+	printStatements(statements);
+	std::cout << std::endl;
 #endif
 
-	Compiler::compileIntoFile(args, args.outputFile);
+	// Compiler::compileIntoFile(global::args.outputFile);
 }

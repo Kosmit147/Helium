@@ -2,172 +2,251 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 #include "Parser.h"
+
+#include <stack>
+
+#include "global.h"
+#include "Tokenizer.h"
 #include "error.h"
 
 using TokenType = Token::TokenType;
-using ExprType = Expression::Type;
 using StatementType = Statement::Type;
 
-const Args* Parser::_args = nullptr;
-Ref<Arena<Literal>> Parser::_literals = nullptr;
-Ref<Arena<Variable>> Parser::_variables = nullptr;
-Ref<Arena<Expression>> Parser::_expressions = nullptr;
+const GrammarTree Parser::_grammarTree;
 
-std::vector<Statement> Parser::parseTokens(const Args& args, const TokensData& tokensData)
+std::vector<Statement> Parser::parseTokens(const std::vector<Token>& tokens)
 {
-	_args = &args;
-	_literals = tokensData.literals;
-	_variables = tokensData.variables;
-	_expressions = createRef<Arena<Expression>>(10000);
-
 	std::vector<Statement> statements;
 	statements.reserve(Tokenizer::semicolonCount());
 
-	const std::vector<Token>& tokens = tokensData.tokens;
-	const Token* stmtStartToken = &tokens[0];
+	const Token* stmtStartPtr = &tokens[0];
 
 	for (const Token& token : tokens)
 	{
-		if (token.tokenType == TokenType::SEMICOLON)
+		if (token.tokenType == TokenType::SEMICOLON /* TODO: or closing brace */)
 		{
-			statements.emplace_back(parseStatement(stmtStartToken, &token));
-			stmtStartToken = (&token) + 1;
+			const Token* stmtEndPtr = &token;
+			statements.emplace_back(parseStatement({ stmtStartPtr, stmtEndPtr }));
+			stmtStartPtr = stmtEndPtr + 1;
 		}
 	}
 
 	const Token& lastToken = tokens.back();
 
-	if (lastToken.tokenType != TokenType::SEMICOLON)
-		exitWithError(ErrorCode::EXPECTED_A_SEMICOLON, _args->inputFile, lastToken.col, lastToken.row);
+	if (lastToken.tokenType != TokenType::SEMICOLON /* TODO: or closing brace */)
+		exitWithError(ErrorCode::EXPECTED_A_SEMICOLON, lastToken.col, lastToken.row);
 
 	return statements;
 }
 
-Statement Parser::parseStatement(const Token* start, const Token* end)
+Statement Parser::parseStatement(TokenView view)
 {
-	switch (start->tokenType)
+	for (const auto& grammarBranch : _grammarTree.branches)
 	{
-	case TokenType::SEMICOLON:
-		return { StatementType::EMPTY };
-		break;
-	case TokenType::EXIT:
-		return parseExit(start, end);
-		break;
-	case TokenType::VARIABLE:
-		return parseAssign(start, end);
-		break;
-	case TokenType::ERR:
-		HE_DEBUG_BREAK;
-		exitWithError(ErrorCode::INVALID_TOKEN, _args->inputFile, start->row, start->col);
-		return { StatementType::EMPTY };
-		break;
-	default:
-		exitWithError(ErrorCode::SYNTAX_ERROR, _args->inputFile, start->row, start->col);
-		return { StatementType::EMPTY };
-		break;
+		auto stmt = matchBranch(grammarBranch, { view.first, view.last });
+
+		if (stmt.has_value())
+			return *stmt;
 	}
+
+	const Token& stmtStart = *view.first;
+
+	exitWithError(ErrorCode::FAILED_TO_PARSE_STATEMENT, stmtStart.row, stmtStart.col);
+	return { StatementType::EMPTY };
 }
 
-Expression Parser::parseExpr(const Token* start, const Token* end)
+std::optional<Statement> Parser::matchBranch(GrammarTree::Branch branch, 
+	TokenView view)
 {
-	if (start->tokenType == TokenType::OPEN_PAREN &&
-		end->tokenType == TokenType::CLOSE_PAREN)
+	Statement stmt;
+	
+	if (traverseNodes(stmt, branch.startingNode, view))
 	{
-		// "(...)"
-		if (end - start >= 2)
+		stmt.type = branch.statementType;
+		stmt.row = view.first->row;
+		return stmt;
+	}
+
+	return {};
+}
+
+// returns true if managed to successfully traverse through a branch of the grammar tree
+bool Parser::traverseNodes(Statement& stmt, const GrammarTree::Node* node, TokenView view)
+{
+	using Node = GrammarTree::Node;
+
+	TokenView remainingTokensView = view;
+
+	if (node->type == Node::Type::EXPR)
+	{
+		auto exprData = parseExpr(view);
+
+		if (exprData)
 		{
-			start++;
-			end--;
+			Expression& expr = exprData->expr;
+			const Token* exprEnd = exprData->exprSpan.last;
+			stmt.a = &global::expressions.pushBack(std::move(expr));
+			remainingTokensView.first = exprEnd;
 		}
-		// empty expression "()"
 		else
 		{
-			return { ExprType::EMPTY };
+			return false;
 		}
 	}
-
-	auto findClosingParen = [&](const Token* openParen)
+	else if (node->type == Node::Type::TOKEN)
 	{
-		for (const Token* i = openParen + 1; i <= end; i++)
-			if (i->tokenType == TokenType::CLOSE_PAREN)
-				return i;
+		if (node->tokenType != remainingTokensView.first->tokenType)
+			return false;
+	}
 
-		exitWithError(ErrorCode::EXPECTED_A_CLOSING_PAREN, _args->inputFile, openParen->row, openParen->col);
-		return (const Token*)nullptr;
-	};
+	if (!node->branchingNodes.empty())
+	{
+		for (const Node* branchingNode : node->branchingNodes)
+		{
+			if (traverseNodes(stmt, branchingNode, { remainingTokensView.first + 1, remainingTokensView.last }))
+				return true;
+		}
+	}
+	
+	if (remainingTokensView.first == remainingTokensView.last)
+	{
+		// we've reached the last token and matched every one so far, job done
+		return true;
+	}
+
+	return false;
+}
+
+constexpr inline static usize getOperatorPrecedence(TokenType tokenType)
+{
+	switch (tokenType)
+	{
+	case TokenType::ASTERISK:
+	case TokenType::FORWARD_SLASH:
+		return 2;
+		break;
+	case TokenType::PLUS:
+	case TokenType::MINUS:
+		return 1;
+		break;
+	}
+
+	HE_DEBUG_BREAK;
+	return 0;
+}
+
+enum class TokenRpnType
+{
+	OPERAND,
+	OPERATOR,
+	OPEN_PAREN,
+	CLOSE_PAREN,
+	TERMINATOR,
+	INVALID,
+};
+
+constexpr inline static TokenRpnType getTokenRpnType(TokenType tokenType)
+{
+	switch (tokenType)
+	{
+	case TokenType::LITERAL:
+	case TokenType::VARIABLE:
+		return TokenRpnType::OPERAND;
+		break;
+	case TokenType::PLUS:
+	case TokenType::MINUS:
+	case TokenType::ASTERISK:
+	case TokenType::FORWARD_SLASH:
+		return TokenRpnType::OPERATOR;
+		break;
+	case TokenType::OPEN_PAREN:
+		return TokenRpnType::OPEN_PAREN;
+		break;
+	case TokenType::CLOSE_PAREN:
+		return TokenRpnType::CLOSE_PAREN;
+		break;
+	// TODO: case TokenType::CLOSE_BRACE:
+	case TokenType::SEMICOLON:
+		return TokenRpnType::TERMINATOR;
+		break;
+	case TokenType::NONE:
+	case TokenType::ERR:
+	case TokenType::EXIT:
+	case TokenType::EQUALS:
+		return TokenRpnType::INVALID;
+		break;
+	}
+
+	HE_DEBUG_BREAK;
+	return TokenRpnType::INVALID;
+}
+
+std::optional<ExprData> Parser::parseExpr(TokenView view)
+{
+	using TokenStack = std::stack<const Token*, std::vector<const Token*>>;
 
 	Expression expr;
+	TokenStack tokenStack;
+	std::vector<Token>& rpnVec = expr.rpn;
 
-	for (const Token* token = start; token <= end; token++)
-	{
-		const Token* closingParen;
-
-		switch (token->tokenType)
+	auto popIntoRpnAfterClosingParen = [&](const Token& closingParen) {
+		while (tokenStack.top()->tokenType != TokenType::OPEN_PAREN)
 		{
-		case TokenType::OPEN_PAREN:
-			closingParen = findClosingParen(token);
-			expr.a = &_expressions->pushBack(parseExpr(token + 1, closingParen - 1));
+			if (tokenStack.empty())
+				exitWithError(ErrorCode::UNEXPECTED_CHARACTER, closingParen.row, closingParen.col);
+
+			rpnVec.push_back(*tokenStack.top());
+			tokenStack.pop();
+		}
+	};
+
+	auto popOperatorsOfHigherPrecedenceIntoRpn = [&](const Token& rpnOperator) {
+		usize opPrecedence = getOperatorPrecedence(rpnOperator.tokenType);
+		while (!tokenStack.empty() && getOperatorPrecedence(tokenStack.top()->tokenType) >= opPrecedence)
+		{
+			rpnVec.push_back(*tokenStack.top());
+			tokenStack.pop();
+		}
+		tokenStack.push(&rpnOperator);
+	};
+
+	auto emptyStackIntoRpn = [&]() {
+		while (!tokenStack.empty())
+		{
+			rpnVec.push_back(*tokenStack.top());
+			tokenStack.pop();
+		}
+	};
+
+	const Token* exprEnd = view.last;
+
+	for (const Token& token : view)
+	{
+		switch (getTokenRpnType(token.tokenType))
+		{
+		case TokenRpnType::OPERAND:
+			rpnVec.push_back(token);
 			break;
-		case TokenType::CLOSE_PAREN:
-			exitWithError(ErrorCode::UNEXPECTED_CHARACTER, _args->inputFile, token->row, token->col);
+		case TokenRpnType::OPEN_PAREN:
+			tokenStack.push(&token);
 			break;
-		case TokenType::LITERAL:
+		case TokenRpnType::CLOSE_PAREN:
+			popIntoRpnAfterClosingParen(token);
 			break;
-		case TokenType::VARIABLE:
+		case TokenRpnType::OPERATOR:
+			popOperatorsOfHigherPrecedenceIntoRpn(token);
 			break;
-		case TokenType::PLUS:
+		// TODO: case TokenType::CLOSE_BRACE:
+		case TokenRpnType::TERMINATOR:
+			emptyStackIntoRpn();
+			exprEnd = &token - 1;
+			return std::optional<ExprData>({ expr, { view.first, exprEnd } });
 			break;
-		case TokenType::MINUS:
-			break;
-		case TokenType::ASTERISK:
-			break;
-		case TokenType::FORWARD_SLASH:
+		case TokenRpnType::INVALID:
+			return {};
 			break;
 		}
 	}
 
-	return Expression();
-}
-
-Statement Parser::parseExit(const Token* start, const Token* end)
-{
-	Statement statement;
-
-	// *start is definitely an exit token
-	const Token* token = start + 1;
-
-	if (token == end)
-	{
-		exitWithError(ErrorCode::EXPECTED_AN_EXPRESSION, _args->inputFile, token->row, token->col);
-		return { StatementType::EMPTY };
-	}
-
-	statement.type = StatementType::EXIT;
-	statement.a = &_expressions->pushBack(parseExpr(token, end));
-
-	return statement;
-}
-
-Statement Parser::parseAssign(const Token* start, const Token* end)
-{
-	Statement statement;
-
-	// *start is definitely a variable token
-	const Token* token = start + 1;
-
-	if (token >= end || token->tokenType != TokenType::EQUALS)
-	{
-		HE_DEBUG_BREAK;
-		exitWithError(ErrorCode::EXPECTED_EQUALS, _args->inputFile, token->row, token->col);
-		return { StatementType::EMPTY };
-	}
-
-	// a - variable to assign an expression to
-	// b - the expression
-
-	statement.type = StatementType::ASSIGN;
-	statement.a = &_expressions->pushBack({ .type = ExprType::VARIABLE , .variable = start->variable });
-	statement.b = &_expressions->pushBack(parseExpr(token + 1, end));
-
-	return statement;
+	return std::optional<ExprData>({ expr, { view.first, exprEnd } });
 }

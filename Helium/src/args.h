@@ -5,15 +5,13 @@
 
 #include <string>
 
-#include "common.h"
-
 struct Args
 {
 	std::string inputFile = "";
 	std::string outputFile = "";
 };
 
-enum class ArgType : u8
+enum class ArgType
 {
 	NONE,
 	OUTPUT_FILE_NAME,

@@ -3,14 +3,14 @@
 
 #pragma once
 
+#include "common.h"
+
 enum class HeType : u8
 {
 	I32
 };
 
 #ifdef _DEBUG
-
-#include <string>
 
 constexpr const char* getHeTypeStr(HeType type);
 

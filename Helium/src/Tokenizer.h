@@ -3,18 +3,16 @@
 
 #pragma once
 
+#include <vector>
 #include <string_view>
 
-#include "Token.h"
-#include "TokensData.h"
 #include "common.h"
-#include "Args.h"
-#include "Arena.h"
+#include "Token.h"
 
 class Tokenizer
 {
 public:
-	[[nodiscard]] static TokensData tokenize(const Args& args, std::string_view input);
+	[[nodiscard]] static std::vector<Token> tokenize(std::string_view input);
 	[[nodiscard]] inline static usize semicolonCount() { return _semicolonCount; }
 	
 private:
@@ -22,12 +20,8 @@ private:
 	static usize _row;
 	static usize _col;
 	static usize _colOffset;
-	static it _index;
-	static const Args* _args;
+	static usize _inputIndex;
 	static usize _semicolonCount;
-
-	static Ref<Arena<Literal>> _literals;
-	static Ref<Arena<Variable>> _variables;
 
 private:
 	[[nodiscard]] static Token readKeywordOrVar();

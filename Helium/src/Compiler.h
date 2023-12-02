@@ -3,13 +3,10 @@
 
 #pragma once
 
-#include "Args.h"
+#include <string_view>
 
 class Compiler
 {
 public:
-	static void compileIntoFile(const Args& args, std::string_view fileName);
-
-private:
-	static const Args* _args;
+	static void compileIntoFile(std::string_view fileName);
 };

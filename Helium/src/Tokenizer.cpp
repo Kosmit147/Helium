@@ -7,9 +7,9 @@
 #include <stdexcept>
 #include <utility>
 
-#include "common.h"
-#include "asciiUtils.h"
+#include "global.h"
 #include "error.h"
+#include "asciiUtils.h"
 
 using TokenType = Token::TokenType;
 
@@ -17,33 +17,23 @@ std::string_view Tokenizer::_input;
 usize Tokenizer::_row = 0;
 usize Tokenizer::_col = 0;
 usize Tokenizer::_colOffset = 0;
-it Tokenizer::_index = 0;
-const Args* Tokenizer::_args = nullptr;
+usize Tokenizer::_inputIndex = 0;
 usize Tokenizer::_semicolonCount = 0;
 
-Ref<Arena<Literal>> Tokenizer::_literals = nullptr;
-Ref<Arena<Variable>> Tokenizer::_variables = nullptr;
-
-TokensData Tokenizer::tokenize(const Args& args, std::string_view input)
+std::vector<Token> Tokenizer::tokenize(std::string_view input)
 {
-	_args = &args;
 	_input = input;
 
-	TokensData tokensData;
-	std::vector<Token>& tokens = tokensData.tokens;
-	tokensData.literals = createRef<Arena<Literal>>(1000);
-	tokensData.variables = createRef<Arena<Variable>>(1000);
-	_literals = tokensData.literals;
-	_variables = tokensData.variables;
+	std::vector<Token> tokens;
 
-	for (; _index < _input.length(); _index++)
+	for (; _inputIndex < _input.length(); _inputIndex++)
 	{
-		char character = _input[_index];
+		char character = _input[_inputIndex];
 		CharacterType type = getCharacterType(character);
 
 		if (character == '\n')
 		{
-			_colOffset += _index + 1;
+			_colOffset += _inputIndex + 1;
 			_row++;
 			continue;
 		}
@@ -68,17 +58,17 @@ TokensData Tokenizer::tokenize(const Args& args, std::string_view input)
 		}
 	}
 
-	return tokensData;
+	return tokens;
 }
 
 Token Tokenizer::readKeywordOrVar()
 {
-	usize tokenStartCol = _index - _colOffset;
+	usize tokenStartCol = _inputIndex - _colOffset;
 	std::string tokenStr = "";
 	
-	for (; _index < _input.length(); _index++)
+	for (; _inputIndex < _input.length(); _inputIndex++)
 	{
-		char character = _input[_index];
+		char character = _input[_inputIndex];
 		CharacterType type = getCharacterType(character);
 
 		if (type == CharacterType::ALPHABETIC || type == CharacterType::DIGIT)
@@ -87,7 +77,7 @@ Token Tokenizer::readKeywordOrVar()
 		}
 		else
 		{
-			_index--;
+			_inputIndex--;
 
 			auto search = Token::tokenTypeMap.find(tokenStr);
 			if (search != Token::tokenTypeMap.end())
@@ -97,25 +87,25 @@ Token Tokenizer::readKeywordOrVar()
 			else
 			{
 				Token token(TokenType::VARIABLE, _row, tokenStartCol);
-				token.variable = &_variables->emplaceBack(HeType::I32, std::move(tokenStr));
+				token.variable = &global::variables.emplaceBack(HeType::I32, std::move(tokenStr));
 				return token;
 			}
 		}
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _args->inputFile, _row, tokenStartCol);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _row, tokenStartCol);
 	return Token::errorToken;
 }
 
 Token Tokenizer::readI32Literal()
 {
-	usize tokenStartCol = _index - _colOffset;
+	usize tokenStartCol = _inputIndex - _colOffset;
 
 	std::string tokenStr = "";
-	for (; _index < _input.length(); _index++)
+	for (; _inputIndex < _input.length(); _inputIndex++)
 	{
-		char character = _input[_index];
+		char character = _input[_inputIndex];
 		CharacterType type = getCharacterType(character);
 
 		if (type == CharacterType::DIGIT)
@@ -124,7 +114,7 @@ Token Tokenizer::readI32Literal()
 		}
 		else
 		{
-			_index--;
+			_inputIndex--;
 
 			i32 value;
 
@@ -134,23 +124,23 @@ Token Tokenizer::readI32Literal()
 			}
 			catch (std::out_of_range&)
 			{
-				exitWithError(ErrorCode::I32_LITERAL_OUT_OF_RANGE, _args->inputFile, _row, tokenStartCol);
+				exitWithError(ErrorCode::I32_LITERAL_OUT_OF_RANGE, _row, tokenStartCol);
 			}
 
 			Token token(TokenType::LITERAL, _row, tokenStartCol);
-			token.literal = &_literals->emplaceBack(HeType::I32, value);
+			token.literal = &global::literals.emplaceBack(value);
 			return token;
 		}
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _args->inputFile, _row, tokenStartCol);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _row, tokenStartCol);
 	return Token::errorToken;
 }
 
 Token Tokenizer::readSpecialChar()
 {
-	char character = _input[_index];
+	char character = _input[_inputIndex];
 
 	auto search = Token::tokenTypeMap.find({ character });
 
@@ -158,14 +148,14 @@ Token Tokenizer::readSpecialChar()
 	{
 		if (search->second == TokenType::SEMICOLON)
 			_semicolonCount++;
-		return { search->second, _row, _index - _colOffset };
+		return { search->second, _row, _inputIndex - _colOffset };
 	}
 	else
 	{
-		exitWithError(ErrorCode::UNEXPECTED_CHARACTER, _args->inputFile, _row, _col);
+		exitWithError(ErrorCode::UNEXPECTED_CHARACTER, _row, _col);
 	}
 
 	HE_DEBUG_BREAK;
-	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _args->inputFile, _row, _col);
+	exitWithError(ErrorCode::FAILED_TO_TOKENIZE, _row, _col);
 	return Token::errorToken;
 }

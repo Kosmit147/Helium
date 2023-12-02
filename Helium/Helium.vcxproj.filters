@@ -18,7 +18,7 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\args.cpp">
+    <ClCompile Include="src\Args.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Tokenizer.cpp">
@@ -45,18 +45,24 @@
     <ClCompile Include="src\Token.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GrammarTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\parsing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\typeDefs.h">
+    <ClInclude Include="src\types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\args.h">
+    <ClInclude Include="src\Args.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\error.h">
@@ -95,10 +101,19 @@
     <ClInclude Include="src\Arena.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\TokensData.h">
+    <ClInclude Include="src\Token.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Token.h">
+    <ClInclude Include="src\GrammarTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\parsing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\help.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

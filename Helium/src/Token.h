@@ -3,11 +3,12 @@
 
 #pragma once
 
+#include <string>
+#include <string_view>
 #include <unordered_map>
 
 #include "common.h"
 #include "heType.h"
-#include "error.h"
 
 struct Literal
 {
@@ -15,37 +16,10 @@ struct Literal
 
 	union {
 		i32 valI32;
+		/* TODO: add more types */
 	};
 
-	template<typename T>
-	inline Literal(HeType type, T value) : type(type)
-	{
-		switch (type)
-		{
-		case HeType::I32:
-			valI32 = value;
-			break;
-		default:
-			HE_DEBUG_BREAK;
-			exitWithError(ErrorCode::INCORRECT_LITERAL_TYPE);
-			break;
-		}
-	}
-
-	template<typename T>
-	inline T getValue(HeType valueType) const
-	{
-		switch (valueType)
-		{
-		case HeType::I32:
-			return (T)valI32;
-			break;
-		default:
-			HE_DEBUG_BREAK;
-			return (T)0;
-			break;
-		}
-	}
+	inline Literal(i32 value) : type(HeType::I32), valI32(value) {}
 };
 
 struct Variable
@@ -61,6 +35,7 @@ struct Token
 {
 	enum class TokenType : u8
 	{
+		NONE,
 		ERR,
 		EXIT,
 		LITERAL,
@@ -79,20 +54,27 @@ struct Token
 	static const std::unordered_map<std::string, TokenType> tokenTypeMap;
 	static const Token errorToken;
 
-	const TokenType tokenType;
-	const usize row;
-	const usize col;
+	TokenType tokenType;
+	usize row;
+	usize col;
+
+	// TODO: make this into a union
 	Literal* literal;
 	Variable* variable;
 
 	Token(TokenType tokenType, usize row, usize col);
-	Token(const Token& other);
 
 #ifdef _DEBUG
 	static const std::unordered_map<TokenType, std::string> tokenNameMap;
-	[[nodiscard]] static const char* getTokenStr(TokenType type);
-#endif
+	[[nodiscard]] static inline const char* getTokenTypeStr(TokenType type)
+	{
+		auto search = tokenNameMap.find(type);
 
-private:
-	Token& operator=(const Token& other) = delete;
+		if (search != tokenNameMap.end())
+			return search->second.c_str();
+
+		HE_DEBUG_BREAK;
+		return ERR_STR;
+	}
+#endif
 };
