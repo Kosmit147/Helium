@@ -3,33 +3,33 @@
 
 #pragma once
 
-#include <iostream>
-
-inline void printHelp()
-{
-	// TODO: implement help here
-
-	std::cout << std::endl;
-	std::cout << "Helium" << std::endl;
-	std::cout << "TODO: Implement help page here" << std::endl;
-	std::cout << std::endl;
-}
-
 #ifdef _DEBUG
 
 #include <vector>
 
-#include "common.h"
-#include "Tokenizer.h"
+#include "Token.h"
+#include "parsing.h"
+
+static usize indentLevel = 0;
+
+inline std::ostream& indent(std::ostream& stream)
+{
+	for (it i = 0; i < indentLevel; i++)
+		stream << '\t';
+
+	return stream;
+}
 
 inline std::ostream& operator<<(std::ostream& stream, const Literal& literal)
 {
+	indent(stream);
+
 	stream << "{ literalType: " << getHeTypeStr(literal.type) << ", value: ";
 
 	switch (literal.type)
 	{
 	case HeType::I32:
-		stream << literal.getValue<i32>(HeType::I32);
+		stream << literal.valI32;
 		break;
 	default:
 		HE_DEBUG_BREAK;
@@ -42,6 +42,8 @@ inline std::ostream& operator<<(std::ostream& stream, const Literal& literal)
 
 inline std::ostream& operator<<(std::ostream& stream, const Variable& variable)
 {
+	indent(stream);
+
 	stream << "{ variableType: " << getHeTypeStr(variable.type) << ", name: "
 		<< variable.name << " }";
 
@@ -50,33 +52,99 @@ inline std::ostream& operator<<(std::ostream& stream, const Variable& variable)
 
 inline std::ostream& operator<<(std::ostream& stream, const Token& token)
 {
-	stream << "{ tokenType: " << Token::getTokenStr(token.tokenType) << ", "
+	indent(stream);
+
+	stream << "{ tokenType: " << Token::getTokenTypeStr(token.tokenType) << ", "
 		<< token.row << ":" << token.col << " }";
+
+	indentLevel++;
 
 	if (token.literal)
 	{
-		std::cout << std::endl;
-		std::cout << '\t' << *token.literal;
+		stream << std::endl;
+		stream << *token.literal;
 	}
 
 	if (token.variable)
 	{
-		std::cout << std::endl;
-		std::cout << '\t' << *token.variable;
+		stream << std::endl;
+		stream << *token.variable;
 	}
+
+	indentLevel--;
+
+	return stream;
+}
+
+inline std::ostream& operator<<(std::ostream& stream, const Expression& expr)
+{
+	indent(stream);
+
+	stream << "{ expression }" << std::endl;
+
+	indentLevel++;
+
+	for (const Token& token : expr.rpn)
+		stream << token << std::endl;
+
+	indentLevel--;
+
+	return stream;
+}
+
+inline std::ostream& operator<<(std::ostream& stream, const Statement& statement)
+{
+	indent(stream);
+
+	stream << "{ statementType: " << Statement::getStatementTypeStr(statement.type) << ", "
+		<< statement.row << " }";
+
+	indentLevel++;
+
+	if (statement.a)
+	{
+		stream << std::endl;
+		stream << *statement.a;
+	}
+
+	if (statement.b)
+	{
+		stream << std::endl;
+		stream << *statement.b;
+	}
+
+	indentLevel--;
 
 	return stream;
 }
 
 inline void printTokens(const std::vector<Token>& tokens)
 {
+	std::cout << "--- TOKENS ---" << std::endl;
+
+	indentLevel = 0;
+
 	for (const Token& token : tokens)
 		std::cout << token << std::endl;
 }
 
 inline void printCode(std::string_view code)
 {
+	std::cout << "--- SOURCE ---" << std::endl;
+
+	indentLevel = 0;
+
 	std::cout << code << std::endl;
+}
+
+inline void printStatements(const std::vector<Statement> statements)
+{
+	std::cout << "--- STATEMENTS ---" << std::endl;
+
+	indentLevel = 0;
+
+	for (const Statement& stmt : statements)
+		std::cout << stmt << std::endl;
 }
 
 #endif // _DEBUG
