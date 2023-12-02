@@ -4,7 +4,6 @@
 #pragma once
 
 #include <cstdint>
-#include <cstddef>
 #include <memory>
 
 using u8 = uint8_t;
