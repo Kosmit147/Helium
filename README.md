@@ -1,3 +1,3 @@
 # Helium
 
-A basic compiler in written in C++.
+A basic compiler written in C++.
