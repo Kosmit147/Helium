@@ -90,7 +90,7 @@ bool Parser::traverseNodes(Statement& stmt, const GrammarTree::Node* node, Token
 
 			if (nodeType == Node::Type::EXPRA)
 				stmt.a = &global::expressions.pushBack(std::move(expr));
-			else if (nodeType == Node::Type::EXPRA)
+			else // if (nodeType == Node::Type::EXPRB)
 				stmt.b = &global::expressions.pushBack(std::move(expr));
 			
 			remainingTokensView.first = exprEnd;

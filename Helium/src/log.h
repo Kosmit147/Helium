@@ -137,7 +137,7 @@ inline void printCode(std::string_view code)
 	std::cout << code << std::endl;
 }
 
-inline void printStatements(const std::vector<Statement> statements)
+inline void printStatements(const std::vector<Statement>& statements)
 {
 	std::cout << "--- STATEMENTS ---" << std::endl;
 
