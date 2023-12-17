@@ -59,7 +59,7 @@ struct Token
 	static const std::unordered_map<std::string, TokenType> tokenTypeMap;
 	static const Token errorToken;
 
-	TokenType tokenType;
+	TokenType type;
 	FilePosition filePos;
 
 	// TODO: make this into a union
@@ -69,7 +69,7 @@ struct Token
 		Variable* variable;
 	};
 
-	Token(TokenType tokenType, FilePosition filePos );
+	Token(TokenType type, FilePosition filePos );
 
 #ifdef _DEBUG
 	static const std::unordered_map<TokenType, std::string> tokenNameMap;

@@ -10,12 +10,14 @@
 
 struct GrammarTree
 {
+public:
 	using TokenType = Token::TokenType;
 	using StatementType = Statement::Type;
 
 	struct Node
 	{
-		enum class Type {
+		enum class Type 
+		{
 			TOKEN,
 			EXPRA,
 			EXPRB,
@@ -25,7 +27,7 @@ struct GrammarTree
 		TokenType tokenType;
 		std::vector<Node*> branchingNodes;
 
-		inline Node(Type type, TokenType tokenType)
+		constexpr inline Node(Type type, TokenType tokenType)
 			: type(type), tokenType(tokenType), branchingNodes({}) {}
 	};
 
@@ -34,12 +36,11 @@ struct GrammarTree
 		StatementType statementType;
 		Node* startingNode;
 	};
+	
+	std::vector<Branch> branches;
 
-	std::array<Branch, 3> branches;
+	GrammarTree();
 
 private:
 	std::vector<Node> _nodes;
-
-public:
-	GrammarTree();
 };

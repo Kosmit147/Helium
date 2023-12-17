@@ -23,7 +23,7 @@ std::vector<Statement> Parser::parseTokens(const std::vector<Token>& tokens)
 
 	for (const Token& token : tokens)
 	{
-		if (token.tokenType == TokenType::SEMICOLON /* TODO: or closing brace */)
+		if (token.type == TokenType::SEMICOLON /* TODO: or closing brace */)
 		{
 			const Token* stmtEndPtr = &token;
 			statements.emplace_back(parseStatement({ stmtStartPtr, stmtEndPtr }));
@@ -33,7 +33,7 @@ std::vector<Statement> Parser::parseTokens(const std::vector<Token>& tokens)
 
 	const Token& lastToken = tokens.back();
 
-	if (lastToken.tokenType != TokenType::SEMICOLON /* TODO: or closing brace */)
+	if (lastToken.type != TokenType::SEMICOLON /* TODO: or closing brace */)
 		exitWithError(ErrorCode::EXPECTED_A_SEMICOLON, lastToken.filePos);
 
 	return statements;
@@ -102,7 +102,7 @@ bool Parser::traverseNodes(Statement& stmt, const GrammarTree::Node* node, Token
 	}
 	else if (nodeType == Node::Type::TOKEN)
 	{
-		if (node->tokenType != remainingTokensView.first->tokenType)
+		if (node->tokenType != remainingTokensView.first->type)
 			return false;
 	}
 
@@ -197,7 +197,7 @@ std::optional<ExprData> Parser::parseExpr(TokenView view)
 	std::vector<Token>& rpnVec = expr.rpn;
 
 	auto popIntoRpnAfterClosingParen = [&](const Token& closingParen) {
-		while (tokenStack.top()->tokenType != TokenType::OPEN_PAREN)
+		while (tokenStack.top()->type != TokenType::OPEN_PAREN)
 		{
 			if (tokenStack.empty())
 				exitWithError(ErrorCode::UNEXPECTED_CHARACTER, closingParen.filePos);
@@ -208,8 +208,8 @@ std::optional<ExprData> Parser::parseExpr(TokenView view)
 	};
 
 	auto popOperatorsOfHigherPrecedenceIntoRpn = [&](const Token& rpnOperator) {
-		usize opPrecedence = getOperatorPrecedence(rpnOperator.tokenType);
-		while (!tokenStack.empty() && getOperatorPrecedence(tokenStack.top()->tokenType) >= opPrecedence)
+		usize opPrecedence = getOperatorPrecedence(rpnOperator.type);
+		while (!tokenStack.empty() && getOperatorPrecedence(tokenStack.top()->type) >= opPrecedence)
 		{
 			rpnVec.push_back(*tokenStack.top());
 			tokenStack.pop();
@@ -229,7 +229,7 @@ std::optional<ExprData> Parser::parseExpr(TokenView view)
 
 	for (const Token& token : view)
 	{
-		switch (getTokenRpnType(token.tokenType))
+		switch (getTokenRpnType(token.type))
 		{
 		case TokenRpnType::OPERAND:
 			rpnVec.push_back(token);

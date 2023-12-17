@@ -26,8 +26,8 @@ Variable::Variable(HeType type, std::string_view name)
 Variable::Variable(HeType type, std::string&& name)
 	: type(type), name(std::move(name)) {}
 
-Token::Token(TokenType tokenType, FilePosition filePos)
-	: tokenType(tokenType), filePos(filePos), literal(nullptr) {}
+Token::Token(TokenType type, FilePosition filePos)
+	: type(type), filePos(filePos), literal(nullptr) {}
 
 #ifdef _DEBUG
 

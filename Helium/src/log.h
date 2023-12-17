@@ -54,12 +54,12 @@ inline std::ostream& operator<<(std::ostream& stream, const Token& token)
 {
 	indent(stream);
 
-	stream << "{ tokenType: " << Token::getTokenTypeStr(token.tokenType) << ", "
+	stream << "{ tokenType: " << Token::getTokenTypeStr(token.type) << ", "
 		<< token.filePos.row << ":" << token.filePos.col << " }";
 
 	indentLevel++;
 
-	switch (token.tokenType)
+	switch (token.type)
 	{
 	case Token::TokenType::LITERAL:
 		stream << std::endl;
