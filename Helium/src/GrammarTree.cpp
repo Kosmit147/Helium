@@ -45,15 +45,14 @@ GrammarTree::GrammarTree()
 	auto countNodes = [&]() {
 		usize count = 0;
 		for (const auto& branchInitList : initList)
-			for (const auto& nodeInitList : branchInitList.nodesInitList)
-				count++;
+			count += branchInitList.nodesInitList.size();
 		return count;
 	};
 
 	static usize branchCount = initList.size();
 	static usize nodeCount = countNodes();
 
-	branches.reserve(initList.size());
+	_branches.reserve(initList.size());
 	_nodes.reserve(nodeCount);
 
 	// initialize nodes vector
@@ -70,7 +69,7 @@ GrammarTree::GrammarTree()
 	// initialize all the pointers in the graph
 	for (const auto& branchInitList : initList)
 	{
-		branches.emplace_back(branchInitList.stmtType, &_nodes[offset]);
+		_branches.emplace_back(branchInitList.stmtType, &_nodes[offset]);
 
 		usize currNodeIndex = 0;
 

@@ -33,7 +33,8 @@ struct Variable
 
 struct Token
 {
-	struct FilePosition {
+	struct FilePosition 
+	{
 		usize row;
 		usize col;
 	};
@@ -61,8 +62,6 @@ struct Token
 
 	TokenType type;
 	FilePosition filePos;
-
-	// TODO: make this into a union
 
 	union {
 		Literal* literal;

@@ -41,7 +41,7 @@ std::vector<Statement> Parser::parseTokens(const std::vector<Token>& tokens)
 
 Statement Parser::parseStatement(TokenView view)
 {
-	for (const auto& grammarBranch : _grammarTree.branches)
+	for (const auto& grammarBranch : _grammarTree.branches())
 	{
 		auto stmt = matchBranch(grammarBranch, { view.first, view.last });
 

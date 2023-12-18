@@ -36,11 +36,12 @@ public:
 		StatementType statementType;
 		Node* startingNode;
 	};
-	
-	std::vector<Branch> branches;
+
+	const std::vector<Branch>& branches() const { return _branches; }
 
 	GrammarTree();
 
 private:
+	std::vector<Branch> _branches;
 	std::vector<Node> _nodes;
 };
