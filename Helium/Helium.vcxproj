@@ -107,6 +107,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Parser.cpp" />
     <ClCompile Include="src\parsing.cpp" />
+    <ClCompile Include="src\pch\pch.cpp" />
     <ClCompile Include="src\Token.cpp" />
     <ClCompile Include="src\Tokenizer.cpp" />
   </ItemGroup>
@@ -125,6 +126,7 @@
     <ClInclude Include="src\heType.h" />
     <ClInclude Include="src\log.h" />
     <ClInclude Include="src\parsing.h" />
+    <ClInclude Include="src\pch\pch.h" />
     <ClInclude Include="src\SegmentsData.h" />
     <ClInclude Include="src\Parser.h" />
     <ClInclude Include="src\Stack.h" />
