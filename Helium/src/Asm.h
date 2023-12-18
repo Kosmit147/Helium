@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <sstream>
+#include "pch.h"
 
 #include "common.h"
 #include "file.h"

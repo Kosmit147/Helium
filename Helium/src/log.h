@@ -5,7 +5,7 @@
 
 #ifdef _DEBUG
 
-#include <vector>
+#include "pch.h"
 
 #include "Token.h"
 #include "parsing.h"
