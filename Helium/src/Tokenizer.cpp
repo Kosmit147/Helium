@@ -33,6 +33,8 @@ std::vector<Token> Tokenizer::tokenize(std::string_view input)
 
 		if (character == '\n')
 		{
+			// TODO: this doesn't seem correct...
+			// shouldn't it be _colOffset += _inputIndex - _colOffset;?
 			_colOffset += _inputIndex + 1;
 			_row++;
 			continue;
@@ -148,6 +150,7 @@ Token Tokenizer::readSpecialChar()
 	{
 		if (search->second == TokenType::SEMICOLON)
 			_semicolonCount++;
+
 		return { search->second, { _row, _inputIndex - _colOffset } };
 	}
 	else
