@@ -5,8 +5,6 @@
 
 #include "pch.h"
 
-#include "common.h"
-
 template <typename ArenaType>
 class ArenaIterator
 {

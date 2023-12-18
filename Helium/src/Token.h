@@ -5,7 +5,6 @@
 
 #include "pch.h"
 
-#include "common.h"
 #include "heType.h"
 
 struct Literal

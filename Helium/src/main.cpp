@@ -3,7 +3,6 @@
 
 #include "pch.h"
 
-#include "common.h"
 #include "global.h"
 #include "Tokenizer.h"
 #include "Compiler.h"

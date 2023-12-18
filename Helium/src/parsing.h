@@ -2,7 +2,6 @@
 
 #include "pch.h"
 
-#include "common.h"
 #include "Token.h"
 
 struct TokenView

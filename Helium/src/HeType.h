@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "common.h"
+#include "pch.h"
 
 enum class HeType : u8
 {

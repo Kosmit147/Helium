@@ -5,8 +5,6 @@
 
 #include "GrammarTree.h"
 
-#include "common.h"
-
 using Node = GrammarTree::Node;
 using NodeType = Node::Type;
 using TokenType = Token::TokenType;

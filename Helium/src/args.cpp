@@ -5,7 +5,6 @@
 
 #include "Args.h"
 
-#include "common.h"
 #include "help.h"
 #include "error.h"
 
