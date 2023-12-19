@@ -13,20 +13,20 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e754b9ff-4a62-41df-84bc-27cd0b46a135}</ProjectGuid>
-    <RootNamespace>Helium</RootNamespace>
+    <ProjectGuid>{5cfbadfc-413e-49ba-8dc0-14aa853cd32a}</ProjectGuid>
+    <RootNamespace>HeliumApplication</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -63,18 +63,14 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <ShowIncludes>false</ShowIncludes>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\src\pch;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Helium\src\pch;$(SolutionDir)\Helium\src;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy $(SolutionDir)\$(Platform)\$(Configuration)\bin\helium.exe $(SolutionDir)\wd</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -87,11 +83,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <ShowIncludes>false</ShowIncludes>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\src\pch;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Helium\src\pch;$(SolutionDir)\Helium\src;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -100,50 +92,16 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy $(SolutionDir)\$(Platform)\$(Configuration)\bin\helium.exe $(SolutionDir)\wd</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Args.cpp" />
-    <ClCompile Include="src\asciiUtils.cpp" />
-    <ClCompile Include="src\Asm.cpp" />
-    <ClCompile Include="src\Compiler.cpp" />
-    <ClCompile Include="src\error.cpp" />
-    <ClCompile Include="src\file.cpp" />
-    <ClCompile Include="src\GrammarTree.cpp" />
-    <ClCompile Include="src\Parser.cpp" />
-    <ClCompile Include="src\parsing.cpp" />
-    <ClCompile Include="src\pch\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="src\Token.cpp" />
-    <ClCompile Include="src\Tokenizer.cpp" />
+    <ProjectReference Include="..\Helium\Helium.vcxproj">
+      <Project>{e754b9ff-4a62-41df-84bc-27cd0b46a135}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Arena.h" />
-    <ClInclude Include="src\Args.h" />
-    <ClInclude Include="src\asciiUtils.h" />
-    <ClInclude Include="src\common.h" />
-    <ClInclude Include="src\Asm.h" />
-    <ClInclude Include="src\Compiler.h" />
-    <ClInclude Include="src\error.h" />
-    <ClInclude Include="src\file.h" />
-    <ClInclude Include="src\global.h" />
-    <ClInclude Include="src\GrammarTree.h" />
-    <ClInclude Include="src\help.h" />
-    <ClInclude Include="src\heType.h" />
-    <ClInclude Include="src\log.h" />
-    <ClInclude Include="src\parsing.h" />
-    <ClInclude Include="src\pch\pch.h" />
-    <ClInclude Include="src\SegmentsData.h" />
-    <ClInclude Include="src\Parser.h" />
-    <ClInclude Include="src\Stack.h" />
-    <ClInclude Include="src\Token.h" />
-    <ClInclude Include="src\Tokenizer.h" />
-    <ClInclude Include="src\types.h" />
-    <ClInclude Include="src\debug.h" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,6 +9,9 @@
 # Debugging utils
 /utils/*.pdf
 
+# Switch Startup Project VS 2022 Extension
+*.sln.startup.json
+
 # User-specific files
 *.rsuser
 *.suo
