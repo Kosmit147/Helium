@@ -98,7 +98,7 @@
     <ClInclude Include="src\Stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Arena.h">
+    <ClInclude Include="src\stl\TypedArena.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Token.h">

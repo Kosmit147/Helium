@@ -5,13 +5,14 @@
 
 #include "pch.h"
 
-template <typename ArenaType>
-class ArenaIterator
+template <typename ArenaSpecializationType>
+class TypedArenaIterator
 {
 public:
-	using ValueType = typename ArenaType::ValueType;
+	using ValueType = typename ArenaSpecializationType::ValueType;
 
-	inline ArenaIterator(const ArenaType& arena, usize index) : _arena(arena), _index(index)
+	inline TypedArenaIterator(const ArenaSpecializationType& arena, usize index) 
+		: _arena(arena), _index(index)
 	{
 		if (_index >= _arena.objectCount())
 			_ptr = nullptr;
@@ -19,7 +20,7 @@ public:
 			_ptr = _arena.addrAt(_index);
 	}
 
-	inline ArenaIterator& operator++()
+	inline TypedArenaIterator& operator++()
 	{
 		_index++;
 
@@ -31,35 +32,35 @@ public:
 		return *this;
 	}
 
-	inline ArenaIterator& operator++(int)
+	inline TypedArenaIterator& operator++(int)
 	{
-		ArenaIterator& iterator = *this;
+		TypedArenaIterator& iterator = *this;
 		++(*this);
 		return iterator;
 	}
 
-	inline bool operator==(const ArenaIterator& other) const { return _ptr == other._ptr; }
-	inline bool operator!=(const ArenaIterator& other) const { return !(*this == other); }
+	inline bool operator==(const TypedArenaIterator& other) const { return _ptr == other._ptr; }
+	inline bool operator!=(const TypedArenaIterator& other) const { return !(*this == other); }
 
 	inline ValueType& operator*() const { return *_ptr; }
 
 private:
-	const ArenaType& _arena;
+	const ArenaSpecializationType& _arena;
 	ValueType* _ptr;
 	usize _index;
 };
 
 // --- IMPORTANT! ---
-// The arena must guarantee that a pointer to an object within the arena
+// TypedArena must guarantee that a pointer to an object within the arena
 // is valid as long as the arena exists and dealloc() wasn't explicitly called
 template <typename T>
-class Arena
+class TypedArena
 {
 public:
 	using ValueType = T;
-	using Iterator = ArenaIterator<Arena<T>>;
+	using Iterator = TypedArenaIterator<TypedArena<T>>;
 
-	explicit inline Arena(usize allocStrat = 100) : _allocStrat(allocStrat)
+	explicit inline TypedArena(usize allocStrat = 100) : _allocStrat(allocStrat)
 	{
 		allocBlocks(1);
 		T* blockAddr = addrAt(0);
@@ -67,7 +68,7 @@ public:
 		_back = blockAddr;
 	}
 
-	inline ~Arena()
+	inline ~TypedArena()
 	{
 		dealloc();
 	}
@@ -181,7 +182,7 @@ private:
 	std::vector<T*> _blocks;
 
 public:
-	Arena() = delete;
-	Arena(const Arena& other) = delete;
-	Arena(Arena&& other) = delete;
+	TypedArena() = delete;
+	TypedArena(const TypedArena& other) = delete;
+	TypedArena(TypedArena&& other) = delete;
 };

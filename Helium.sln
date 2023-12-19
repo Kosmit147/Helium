@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTester", "UnitTester\Un
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HeliumApplication", "HeliumApplication\HeliumApplication.vcxproj", "{5CFBADFC-413E-49BA-8DC0-14AA853CD32A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoogleTestLib", "dependencies\GoogleTestLib\GoogleTestLib.vcxproj", "{C390CFAC-850D-4BD8-9251-F873D04ECAD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -19,14 +21,18 @@ Global
 		{E754B9FF-4A62-41DF-84BC-27CD0B46A135}.Debug|x64.Build.0 = Debug|x64
 		{E754B9FF-4A62-41DF-84BC-27CD0B46A135}.Release|x64.ActiveCfg = Release|x64
 		{E754B9FF-4A62-41DF-84BC-27CD0B46A135}.Release|x64.Build.0 = Release|x64
-		{C3B75C8E-E4D1-42FF-B5C6-E5A5A7960B11}.Debug|x64.ActiveCfg = Debug|x64
-		{C3B75C8E-E4D1-42FF-B5C6-E5A5A7960B11}.Debug|x64.Build.0 = Debug|x64
+		{C3B75C8E-E4D1-42FF-B5C6-E5A5A7960B11}.Debug|x64.ActiveCfg = Release|x64
+		{C3B75C8E-E4D1-42FF-B5C6-E5A5A7960B11}.Debug|x64.Build.0 = Release|x64
 		{C3B75C8E-E4D1-42FF-B5C6-E5A5A7960B11}.Release|x64.ActiveCfg = Release|x64
 		{C3B75C8E-E4D1-42FF-B5C6-E5A5A7960B11}.Release|x64.Build.0 = Release|x64
 		{5CFBADFC-413E-49BA-8DC0-14AA853CD32A}.Debug|x64.ActiveCfg = Debug|x64
 		{5CFBADFC-413E-49BA-8DC0-14AA853CD32A}.Debug|x64.Build.0 = Debug|x64
 		{5CFBADFC-413E-49BA-8DC0-14AA853CD32A}.Release|x64.ActiveCfg = Release|x64
 		{5CFBADFC-413E-49BA-8DC0-14AA853CD32A}.Release|x64.Build.0 = Release|x64
+		{C390CFAC-850D-4BD8-9251-F873D04ECAD5}.Debug|x64.ActiveCfg = Release|x64
+		{C390CFAC-850D-4BD8-9251-F873D04ECAD5}.Debug|x64.Build.0 = Release|x64
+		{C390CFAC-850D-4BD8-9251-F873D04ECAD5}.Release|x64.ActiveCfg = Release|x64
+		{C390CFAC-850D-4BD8-9251-F873D04ECAD5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

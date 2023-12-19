@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Args.h"
-#include "Arena.h"
+#include "stl/TypedArena.h"
 #include "parsing.h"
 
 namespace global {
 	inline Args args;
-	inline Arena<Literal> literals(1000);
-	inline Arena<Variable> variables(1000);
-	inline Arena<Expression> expressions(1000);
+	inline TypedArena<Literal> literals(1000);
+	inline TypedArena<Variable> variables(1000);
+	inline TypedArena<Expression> expressions(1000);
 }
