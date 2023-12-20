@@ -2,12 +2,12 @@
 
 #include "Helium/src/stl/TypedArena.h"
 
-TEST(TypedInfArenaTest, CanCreateArena) 
+TEST(TypedArenaTest, CanCreateArena)
 {
 	TypedArena<int> arena(100);
 }
 
-TEST(TypedInfArenaTest, CanPushBackNewObjects) 
+TEST(TypedArenaTest, CanPushBackNewObjects)
 {
 	TypedArena<int> intArena(5);
 
@@ -36,7 +36,7 @@ TEST(TypedInfArenaTest, CanPushBackNewObjects)
 	EXPECT_EQ(strArena.capacityLeft(), 6);
 }
 
-TEST(TypedInfArenaTest, AllocatesNewBlockWhenOverCapacity) 
+TEST(TypedArenaTest, AllocatesNewBlockWhenOverCapacity) 
 {
 	TypedArena<std::string> arena(2);
 
@@ -74,7 +74,7 @@ TEST(TypedInfArenaTest, AllocatesNewBlockWhenOverCapacity)
 	EXPECT_EQ(arena.capacityLeft(), 0);
 }
 
-TEST(TypedInfArenaTest, CanAllocBlocksManually) 
+TEST(TypedArenaTest, CanAllocBlocksManually)
 {
 	TypedArena<bool> arena(100);
 
@@ -92,7 +92,7 @@ TEST(TypedInfArenaTest, CanAllocBlocksManually)
 	EXPECT_EQ(arena.capacityLeft(), 999);
 }
 
-TEST(TypedInfArenaTest, CanIterateOverObjects)
+TEST(TypedArenaTest, CanIterateOverObjects)
 {
 	constexpr static std::array<int, 10> input = {
 		1, 2, 3, 4, 5, 6, 7, 8, 9, 10
@@ -117,7 +117,7 @@ TEST(TypedInfArenaTest, CanIterateOverObjects)
 		<< "Elements resulting from iterating over TypedArena differ from expected.";
 }
 
-TEST(TypedInfArenaTest, CanGetObjectAtIndex)
+TEST(TypedArenaTest, CanGetObjectAtIndex)
 {
 	TypedArena<int> intArena(2);
 	TypedArena<std::string> strArena(2);
@@ -147,7 +147,7 @@ TEST(TypedInfArenaTest, CanGetObjectAtIndex)
 	EXPECT_EQ(strArena[2], "Three");
 }
 
-TEST(TypedInfArenaTest, BeginAndEndWork) 
+TEST(TypedArenaTest, BeginAndEndWork)
 {
 	TypedArena<int> arena(1);
 
