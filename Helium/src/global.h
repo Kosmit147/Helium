@@ -6,7 +6,7 @@
 
 namespace global {
 	inline Args args;
-	inline TypedArena<Literal> literals(1000);
-	inline TypedArena<Variable> variables(1000);
-	inline TypedArena<Expression> expressions(1000);
+	inline TypedArena<Literal> literals(100000);
+	inline TypedArena<Variable> variables(100000);
+	inline TypedArena<Expression> expressions(10000);
 }
