@@ -9,6 +9,7 @@ struct Args
 {
 	std::string inputFile = "";
 	std::string outputFile = "";
+	bool printHelp = false;
 };
 
 enum class ArgType
@@ -19,4 +20,5 @@ enum class ArgType
 	PRINT_HELP,
 };
 
-[[nodiscard]] Args parseArgs(int argc, char* argv[]);
+[[nodiscard]] Args parseArgs(int argc, char** argv);
+void validateArgs(Args& args);

@@ -10,7 +10,7 @@
 #include "log.h"
 #include "Parser.h"
 
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
 	global::args = parseArgs(argc, argv);
 
@@ -19,13 +19,11 @@ int main(int argc, char* argv[])
 	std::vector<Statement> statements = Parser::parseTokens(tokens);
 
 #ifdef _DEBUG
-	std::cout << std::endl;
 	printTokens(tokens);
 	std::cout << std::endl;
 	printCode(heCode.view());
 	std::cout << std::endl;
 	printStatements(statements);
-	std::cout << std::endl;
 #endif
 
 	// Compiler::compileIntoFile(global::args.outputFile);

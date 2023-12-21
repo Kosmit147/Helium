@@ -5,63 +5,98 @@
 
 #include "Args.h"
 
-#include "help.h"
 #include "error.h"
 
-Args parseArgs(int argc, char* argv[])
+Args parseArgs(int argc, char** argv)
 {
 	if (argc <= 1)
 		exitWithError(ErrorCode::INCORRECT_USAGE);
 
 	Args args;
-
 	ArgType prevArg = ArgType::NONE;
-	std::string argStr;
+	bool expectingValue = false;
 
-	// skip first arg, it's the name of the executable
+	// skip first arg, it's the path to the executable
 	for (it i = 1; i < argc; i++)
 	{
-		argStr = argv[i];
+		const char* currArg = argv[i];
 
-		if (argStr[0] == '-' && prevArg == ArgType::NONE)
+		if (currArg[0] == '-')
 		{
-			if (argStr == "-o")
+			switch (currArg[1])
 			{
-				prevArg = ArgType::OUTPUT_FILE_NAME;
-			}
-			else if (argStr == "-i")
-			{
+			case 'i':
 				prevArg = ArgType::INPUT_FILE_NAME;
-			}
-			else if (argStr == "-h")
-			{
+				expectingValue = true;
+				break;
+			case 'o':
+				prevArg = ArgType::OUTPUT_FILE_NAME;
+				expectingValue = true;
+				break;
+			case 'h':
+				args.printHelp = true;
 				prevArg = ArgType::PRINT_HELP;
-				printHelp();
+				expectingValue = false;
+				break;
+			default:
+				std::string msg;
+				msg.reserve(26);
+				msg.append("Unrecognized argument: -");
+				msg.push_back(currArg[1]);
+				msg.push_back('.');
+				exitWithError(ErrorCode::UNRECOGNIZED_ARGUMENT, msg);
+				break;
 			}
 		}
-		else if (argStr[0] != '-')
+		else
 		{
+			if (!expectingValue)
+				exitWithError(ErrorCode::INCORRECT_USAGE);
+
 			switch (prevArg)
 			{
-			case ArgType::NONE:
 			case ArgType::INPUT_FILE_NAME:
-				args.inputFile = argStr;
+				args.inputFile = currArg;
 				break;
 			case ArgType::OUTPUT_FILE_NAME:
-				args.outputFile = argStr;
+				args.outputFile = currArg;
 				break;
-			case ArgType::PRINT_HELP:
+			case ArgType::NONE:
+			default:
 				exitWithError(ErrorCode::INCORRECT_USAGE);
 				break;
 			}
 
-			prevArg = ArgType::NONE;
-		}
-		else
-		{
-			exitWithError(ErrorCode::INCORRECT_USAGE);
+			expectingValue = false;
 		}
 	}
 
+	validateArgs(args);
 	return args;
+}
+
+void validateArgs(Args& args)
+{
+	std::string& inputFile = args.inputFile;
+	std::string& outputFile = args.outputFile;
+
+	if (inputFile.empty())
+		exitWithError(ErrorCode::NO_INPUT_FILE_SPECIFIED);
+
+	if (outputFile.empty())
+		exitWithError(ErrorCode::NO_OUTPUT_FILE_SPECIFIED);
+
+	usize dotIndex = outputFile.rfind('.');
+
+	if (dotIndex != std::string::npos)
+	{
+		bool hasExeExtension = (strcmp(outputFile.c_str() + dotIndex + 1, "exe") == 0);
+
+		if (!hasExeExtension)
+			outputFile.append(".exe");
+	}
+	else
+	{
+		outputFile.append(".exe");
+	}
 }

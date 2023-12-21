@@ -23,6 +23,12 @@ void exitWithError(ErrorCode errorCodeEnum, Token::FilePosition filePos)
 	case ErrorCode::INCORRECT_USAGE:
 		errorMsg = "Incorrect usage. See helium -h.";
 		break;
+	case ErrorCode::NO_INPUT_FILE_SPECIFIED:
+		errorMsg = "No input file specified. Specify the input file with argument -i \"myprogram.he\"";
+		break;
+	case ErrorCode::NO_OUTPUT_FILE_SPECIFIED:
+		errorMsg = "No output file specified. Specify the output file with argument -o \"myprogram.exe\"";
+		break;
 	case ErrorCode::FAILED_TO_READ_FROM_INPUT_FILE:
 		errorMsg = "Failed to read from input file.";
 		break;
@@ -68,5 +74,13 @@ void exitWithError(ErrorCode errorCodeEnum, Token::FilePosition filePos)
 	int errorCode = (int)errorCodeEnum;
 
 	std::cerr << "ERROR" << errorCode << ": " << errorMsg << std::endl;
+	exit(errorCode);
+}
+
+void exitWithError(ErrorCode errorCodeEnum, std::string_view msg)
+{
+	int errorCode = (int)errorCodeEnum;
+
+	std::cerr << "ERROR" << errorCode << ": " << msg << std::endl;
 	exit(errorCode);
 }

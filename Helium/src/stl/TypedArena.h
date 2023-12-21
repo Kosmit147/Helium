@@ -78,9 +78,6 @@ public:
 		for (it i = 0; i < count; i++)
 		{
 			T* const block = (T*)malloc(sizeof(T) * _allocStrat);
-#ifdef _DEBUG
-			std::cout << "New block(" << sizeof(T) * _allocStrat << " bytes) at " << block << '.' << std::endl;
-#endif
 			_blocks.push_back(block);
 			_capacityLeft += _allocStrat;
 		}
@@ -92,12 +89,7 @@ public:
 			at(i).~T();
 
 		for (T* block : _blocks)
-		{
-#ifdef _DEBUG
-			std::cout << "Freed block at " << block << '.' << std::endl;
-#endif
 			free(block);
-		}
 
 		_objectCount = 0;
 		_capacityLeft = 0;

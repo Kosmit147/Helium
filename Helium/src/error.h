@@ -11,6 +11,9 @@ enum class ErrorCode
 {
 	NO_ERROR = 0,
 	INCORRECT_USAGE = 1,
+	UNRECOGNIZED_ARGUMENT,
+	NO_INPUT_FILE_SPECIFIED,
+	NO_OUTPUT_FILE_SPECIFIED,
 	FAILED_TO_READ_FROM_INPUT_FILE,
 	FAILED_TO_WRITE_TO_OUTPUT_FILE,
 	I32_LITERAL_OUT_OF_RANGE,
@@ -26,3 +29,4 @@ enum class ErrorCode
 };
 
 void exitWithError(ErrorCode errorCodeEnum, Token::FilePosition filePos = { 0, 0 });
+void exitWithError(ErrorCode errorCodeEnum, std::string_view msg);
