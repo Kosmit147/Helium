@@ -90,6 +90,7 @@
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeaderOutputFile>
     </ClCompile>
+    <ClCompile Include="TokenizerTest.cpp" />
     <ClCompile Include="TypedArenaTest.cpp" />
     <ClCompile Include="ArgsTest.cpp" />
     <ClCompile Include="pch.cpp">
