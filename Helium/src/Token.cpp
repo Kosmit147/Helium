@@ -22,15 +22,6 @@ const std::unordered_map<std::string, TokenType> Token::tokenTypeMap =
 	{ "/", TokenType::FORWARD_SLASH },
 };
 
-Variable::Variable(HeType type, std::string_view name)
-	: type(type), name(name) {}
-
-Variable::Variable(HeType type, std::string&& name)
-	: type(type), name(std::move(name)) {}
-
-Token::Token(TokenType type, FilePosition filePos)
-	: type(type), filePos(filePos), literal(nullptr) {}
-
 #ifdef _DEBUG
 
 const std::unordered_map<TokenType, std::string> Token::tokenNameMap = {
@@ -41,7 +32,7 @@ const std::unordered_map<TokenType, std::string> Token::tokenNameMap = {
 	{ TokenType::SEMICOLON,		"semicolon" },
 	{ TokenType::OPEN_PAREN,	"openingParenthesis" },
 	{ TokenType::CLOSE_PAREN,	"closingParenthesis" },
-	{ TokenType::EQUALS,		"assignment" },
+	{ TokenType::EQUALS,		"equals" },
 	{ TokenType::PLUS,			"plus" },
 	{ TokenType::MINUS,			"minus" },
 	{ TokenType::ASTERISK,		"asterisk" },

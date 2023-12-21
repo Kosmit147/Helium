@@ -19,9 +19,9 @@ int main(int argc, char** argv)
 	std::vector<Statement> statements = Parser::parseTokens(tokens);
 
 #ifdef _DEBUG
-	printTokens(tokens);
-	std::cout << std::endl;
 	printCode(heCode.view());
+	std::cout << std::endl;
+	printTokens(tokens);
 	std::cout << std::endl;
 	printStatements(statements);
 #endif

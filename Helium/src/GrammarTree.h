@@ -15,7 +15,7 @@ public:
 
 	struct Node
 	{
-		enum class Type 
+		enum class Type
 		{
 			TOKEN,
 			EXPRA,

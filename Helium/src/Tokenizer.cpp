@@ -33,9 +33,7 @@ std::vector<Token> Tokenizer::tokenize(std::string_view input)
 
 		if (character == '\n')
 		{
-			// TODO: this doesn't seem correct...
-			// shouldn't it be _colOffset += _inputIndex - _colOffset;?
-			_colOffset += _inputIndex + 1;
+			_colOffset += _inputIndex - _colOffset + 1;
 			_row++;
 			continue;
 		}
